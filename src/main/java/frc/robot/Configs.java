@@ -6,9 +6,9 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.CoralIntakeConstants;
-import frc.robot.Constants.CoralWristConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.WristConstants;
 import frc.robot.Constants.AlgaeIntakeConstants;
 
 public final class Configs {
@@ -103,13 +103,13 @@ public final class Configs {
 
     }    
     
-    public static final class CoralWrist {
-        public static final SparkMaxConfig coralWristMotorConfig = new SparkMaxConfig();
+    public static final class Wrist {
+        public static final SparkMaxConfig wristMotorConfig = new SparkMaxConfig();
 
         static {
-                coralWristMotorConfig
+                wristMotorConfig
                         .idleMode(IdleMode.kBrake)
-                        .inverted(CoralWristConstants.CoralWristInverted);
+                        .inverted(WristConstants.WristInverted);
         }
 
     }

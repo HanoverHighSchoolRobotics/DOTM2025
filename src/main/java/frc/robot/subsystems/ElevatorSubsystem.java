@@ -15,7 +15,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
-import frc.robot.Configs.Elevator;
 import frc.robot.Constants.ElevatorConstants;
 
 public class ElevatorSubsystem extends SubsystemBase {
@@ -51,9 +50,9 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // only uncomment if we are sure the profiled PID can work at all times, also add a failsafe button
-    // if(getElevatorPos() < PIDgoal - ElevatorConstants.PIDErrorAllowed && getElevatorPos() > PIDgoal + 
+    // if(getPosition() < PIDgoal - ElevatorConstants.PIDErrorAllowed && getPosition() > PIDgoal + 
     // ElevatorConstants.PIDErrorAllowed && goalSet){
-    //   setElevatorSpeeds(elevatorPIDController.calculate(getElevatorPos()));
+    //   setElevatorSpeeds(elevatorPIDController.calculate(getPosition()));
     // }
     // else
     // {
@@ -62,10 +61,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   public void setElevatorSpeeds(double speed){
-    if(getElevatorPos() < ElevatorConstants.MaxElevatorMargin && getElevatorPos() > ElevatorConstants.MinElevatorMargin){
+    if(getPosition() < ElevatorConstants.MaxElevatorMargin && getPosition() > ElevatorConstants.MinElevatorMargin){
       leftElevatorMotor.set(speed);
     }
-    else if(getElevatorPos() >= ElevatorConstants.MaxElevatorMargin)
+    else if(getPosition() >= ElevatorConstants.MaxElevatorMargin)
     {
       if(speed < 0){
         leftElevatorMotor.set(speed);
@@ -75,7 +74,7 @@ public class ElevatorSubsystem extends SubsystemBase {
         leftElevatorMotor.stopMotor();
       }
     }
-    else if(getElevatorPos() <= ElevatorConstants.MinElevatorMargin)
+    else if(getPosition() <= ElevatorConstants.MinElevatorMargin)
     {
       if(speed > 0){
         leftElevatorMotor.set(speed);
@@ -98,7 +97,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   }
 
   // gets the elevator position in ticks
-  public double getElevatorPos(){
+  public double getPosition(){
     return elevatorEncoder.getPosition();
   }
 
@@ -106,7 +105,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   // doesnt have a second failsafe for a goal too far
   public void manualGoToGoal(double goal){
     this.PIDgoal = goal;
-    setElevatorSpeeds(elevatorPIDController.calculate(getElevatorPos(), goal));
+    setElevatorSpeeds(elevatorPIDController.calculate(getPosition(), goal));
     goalSet = true;
   }
 

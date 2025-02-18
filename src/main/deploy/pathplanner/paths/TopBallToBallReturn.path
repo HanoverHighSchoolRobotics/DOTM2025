@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.8135000000000003,
+        "y": 5.8775
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.3692500000045276,
+        "y": 4.015250000003773
+      },
+      "isLocked": false,
+      "linkedName": "TopBall"
+    },
+    {
+      "anchor": {
+        "x": 5.996250000004528,
+        "y": 0.4955000000037717
+      },
+      "prevControl": {
+        "x": 2.895750000004527,
+        "y": 1.5290000000037736
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "BallReturn"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 89.99999999944576
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 0.0
+  },
+  "useDefaultConstraints": true
+}

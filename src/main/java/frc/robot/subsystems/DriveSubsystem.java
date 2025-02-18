@@ -12,11 +12,14 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 import edu.wpi.first.hal.FRCNetComm.tInstances;
 import edu.wpi.first.hal.FRCNetComm.tResourceType;
 import edu.wpi.first.hal.HAL;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -26,14 +29,18 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.LimelightHelpers;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -63,16 +70,19 @@ public class DriveSubsystem extends SubsystemBase {
 
   // the field for shuffleboard
   private Field2d m_field = new Field2d();
+  private Field2d m_limeField = new Field2d();
 
 
-    // Slew rate filter variables for controlling lateral acceleration
-    private double m_currentRotation = 0.0;
-    private double m_currentTranslationDir = 0.0;
-    private double m_currentTranslationMag = 0.0;
+  // Slew rate filter variables for controlling lateral acceleration
+  private double m_currentRotation = 0.0;
+  private double m_currentTranslationDir = 0.0;
+  private double m_currentTranslationMag = 0.0;
 
-    private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
-    private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
-    private double m_prevTime = WPIUtilJNI.now() * 1e-6;
+  private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
+  private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
+  private double m_prevTime = WPIUtilJNI.now() * 1e-6;
+
+  private double gyroError = 0;
 
 //   // Odometry class for tracking robot pose
 //   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
@@ -134,6 +144,7 @@ public class DriveSubsystem extends SubsystemBase {
     PathPlannerLogging.setLogCurrentPoseCallback(pose -> Logger.recordOutput("Chassis/targetPose",pose));
 
     SmartDashboard.putData("Field", m_field);
+    SmartDashboard.putData("Limelight Bot Field", m_limeField);
   }
 
   @Override
@@ -157,12 +168,50 @@ public class DriveSubsystem extends SubsystemBase {
 
     //Display and update gyro reading and robot position on field object
     SmartDashboard.putNumber("Gyro Reading", getGyroDoubleValue());
+    SmartDashboard.putNumber("Gyro Bounded -180 : 180", getGyroDoubleValueBounded());
+    SmartDashboard.putNumber("Limelight X", LimelightHelpers.getTX(""));
+    SmartDashboard.putNumber("Limelight Area", LimelightHelpers.getTA(""));
     m_field.setRobotPose(m_poseEstimator.getEstimatedPosition());
+    SmartDashboard.putNumber("Gyro Official Reading", getHeading().getDegrees());
 
     //firebear pathplanner
     Logger.recordOutput("Chassis/Pose", getPose());
-    Logger.recordOutput("chassis/gyo", m_gyro.isConnected());
+    Logger.recordOutput("chassis/gyro", m_gyro.isConnected());
 
+    //limelight mt2 documentation
+    //just make sure ur limelight is good with everything in the web ui
+    //level 3 btw
+    /*boolean doRejectUpdate = false;
+    LimelightHelpers.SetRobotOrientation("limelight", m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+    LimelightHelpers.PoseEstimate mt2 = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
+    if(Math.abs(m_gyro.getRate()) > 720) // if our angular velocity is greater than 720 degrees per second, ignore vision updates
+    {
+      doRejectUpdate = true;
+    }
+    if(mt2.tagCount == 0)
+    {
+      doRejectUpdate = true;
+    }
+    if(!doRejectUpdate)
+    {
+      m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+      m_poseEstimator.addVisionMeasurement(
+          mt2.pose,
+          mt2.timestampSeconds);
+    }
+    
+    if(mt2.pose != null){
+      m_limeField.setRobotPose(mt2.pose);
+    }
+    */
+
+    // gyroError = Timer.getFPGATimestamp() * DriveConstants.GyroErrorPerSecond;
+
+    // SmartDashboard.putNumber("Gyro Error", getCalcedGyroError());
+
+    SmartDashboard.putNumber("Timer value", Timer.getFPGATimestamp());
+
+    // SmartDashboard.putNumber("velocity", .toChassisSpeeds.fromFieldRelativeSpeeds())
   }
 
   /**
@@ -179,6 +228,10 @@ public class DriveSubsystem extends SubsystemBase {
   public Pose2d getPose() {
     return m_poseEstimator.getEstimatedPosition();
   }
+
+  // public double getCalcedGyroError(){
+  //   return gyroError;
+  // }
 
   /**
    * Resets the odometry to the specified pose.
@@ -289,6 +342,19 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(45)));
   }
 
+  public void setHorizontal() {
+    m_frontLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(90)));
+    m_frontRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-90)));
+    m_rearLeft.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(-90)));
+    m_rearRight.setDesiredState(new SwerveModuleState(0, Rotation2d.fromDegrees(90)));
+  }
+
+  public Command setHorizontalCmd(){
+    return runOnce(
+      () -> setHorizontal()
+    );
+  }
+
   /**
    * Sets the swerve ModuleStates.
    *
@@ -320,15 +386,20 @@ public class DriveSubsystem extends SubsystemBase {
   /**
    * Returns the heading of the robot.
    *
-   * @return the robot's heading in degrees, from -180 to 180
+   * @return the robot's heading in degrees, from 0 to 360
    */
   public double getGyroDoubleValue() {
     return Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)).getDegrees();
   }
 
+  public double getGyroDoubleValueBounded(){
+    double baseRot = Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)).getDegrees();
+    return (baseRot % 360 + 360) % 360;
+  }
+
   //firebear pathplanner
   private Rotation2d getHeading() {
-    return Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ) * 1.0/*(DriveConstants.kGyroReversed ? -1.0 : 1.0)*/);
+    return Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ) * 1 /* (DriveConstants.kGyroReversed ? -1.0 : 1.0) */);
   }
 
   /**
@@ -339,5 +410,28 @@ public class DriveSubsystem extends SubsystemBase {
   @AutoLogOutput(key = "Chassis/Heading")
   public double getTurnRate() {
     return m_gyro.getRate(IMUAxis.kZ) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+
+  public Command pathFindThenFollowPath(String pathName){
+    PathPlannerPath path = null;
+
+    // Load the path we want to pathfind to and follow
+    try{ 
+      path = PathPlannerPath.fromPathFile(pathName);
+    }
+    catch(Exception e){
+      System.out.println("There was an error in pathFindThenFollowPath");
+    }
+
+    // Create the constraints to use while pathfinding. The constraints defined in the path will only be used for the path.
+    PathConstraints constraints = new PathConstraints(
+            3.0, 4.0,
+            Units.degreesToRadians(540), Units.degreesToRadians(720));
+
+    // Since AutoBuilder is configured, we can use it to build pathfinding commands
+    return AutoBuilder.pathfindThenFollowPath(
+            path,
+            constraints);
+
   }
 }

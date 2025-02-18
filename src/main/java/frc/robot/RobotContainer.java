@@ -19,13 +19,19 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AlgaeIntakeConstants;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.CoralIntakeConstants;
 import frc.robot.Constants.ElevatorConstants;
+import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.DriveClickToAngle;
+import frc.robot.commands.LimelightHorizontalAlign;
+import frc.robot.commands.LimelightRange;
+import frc.robot.commands.ManualMoveHorizontalDistance;
 import frc.robot.commands.ResetGyro;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
@@ -111,14 +117,15 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
-
+    
     JoystickButton aDriverButton = new JoystickButton(m_driverController, XboxController.Button.kA.value);
-    // aDriverButton.onTrue(new MoveArm(armSubsystem, ArmConstants.MOVEARMSPEED));
-    // aDriverButton.onFalse(new MoveArm(armSubsystem, 0.0));
+    aDriverButton.toggleOnTrue(new RunCommand(
+      () -> m_robotDrive.drive(
+          -MathUtil.applyDeadband(m_driverController.getLeftY() * OIConstants.kFASTDRIVESPEEDLIMITER, OIConstants.kDriveDeadband),
+          -MathUtil.applyDeadband(m_driverController.getLeftX() * OIConstants.kFASTDRIVESPEEDLIMITER, OIConstants.kDriveDeadband),
+          -MathUtil.applyDeadband(m_driverController.getRightX() * OIConstants.kFASTROTSPEEDLIMITER, OIConstants.kDriveDeadband),
+          false),
+      m_robotDrive));
 
     JoystickButton bDriverButton = new JoystickButton(m_driverController, XboxController.Button.kB.value);
     bDriverButton.toggleOnTrue(new RunCommand(
@@ -130,17 +137,27 @@ public class RobotContainer {
       m_robotDrive));
 
     JoystickButton xDriverButton = new JoystickButton(m_driverController, XboxController.Button.kX.value);
-    xDriverButton.onTrue(new ResetGyro(m_robotDrive).withTimeout(2));
+    xDriverButton.onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
 
     JoystickButton yDriverButton = new JoystickButton(m_driverController, XboxController.Button.kY.value);
+    yDriverButton.whileTrue(new LimelightRange(m_robotDrive));
 
-    JoystickButton startDriverButton = new JoystickButton(m_auxController, XboxController.Button.kStart.value);
+    JoystickButton startDriverButton = new JoystickButton(m_driverController, XboxController.Button.kStart.value);
+    startDriverButton.whileTrue(new DriveClickToAngle(m_robotDrive));
 
-    JoystickButton backDriverButton = new JoystickButton(m_auxController, XboxController.Button.kBack.value);
+    JoystickButton backDriverButton = new JoystickButton(m_driverController, XboxController.Button.kBack.value);
+    // backDriverButton.whileTrue(m_robotDrive.pathFindThenFollowPath("PathFindThen3OClock"));
+    backDriverButton.whileTrue(new LimelightHorizontalAlign(m_robotDrive));
 
     JoystickButton rightBumperDriverButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
+    rightBumperDriverButton.whileTrue(new ManualMoveHorizontalDistance(m_robotDrive, "Right", FieldConstants.coralFromCenter));
 
     JoystickButton leftBumperDriverButton = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+    leftBumperDriverButton.whileTrue(new ManualMoveHorizontalDistance(m_robotDrive, "Left", FieldConstants.coralFromCenter));
+
+    JoystickButton rightTriggerDriverButton = new JoystickButton(m_driverController, Button.kR1.value);
+
+    JoystickButton leftTriggerDriverButton = new JoystickButton(m_driverController, Button.kL1.value);
     
     JoystickButton aAuxButton = new JoystickButton(m_auxController, XboxController.Button.kA.value);
       aAuxButton.onTrue(m_coralIntake.autoCoralIntake(CoralIntakeConstants.CoralIntakeSpeed))
@@ -169,6 +186,11 @@ public class RobotContainer {
     JoystickButton rightBumperAuxButton = new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value);
 
     JoystickButton leftBumperAuxButton = new JoystickButton(m_auxController, XboxController.Button.kLeftBumper.value);
+
+    JoystickButton rightTriggerAuxButton = new JoystickButton(m_auxController, Button.kR1.value);
+
+    JoystickButton leftTriggerAuxButton = new JoystickButton(m_auxController, Button.kL1.value);
+    
   }
 
   /**

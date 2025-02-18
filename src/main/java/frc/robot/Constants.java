@@ -22,6 +22,7 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
@@ -62,6 +63,13 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 6;
 
     public static final boolean kGyroReversed = true;
+
+    public static final double HorizontalAlignmentSpeed = .2;
+    public static final double HorizontalAlignmentkP = 1.5;
+
+    public static final double MaxMoveInRangeSpeed = .2;
+
+    public static final double SlowRotSpeed = .1;
   }
 
   public static final class ModuleConstants {
@@ -176,10 +184,37 @@ public final class Constants {
     public static final double ArmSpeed = .15;
   }
 
-  public static final class CoralWristConstants {
+  public static final class WristConstants {
     // subsystem constants
-    public static final int CoralWristMotorID = 13; 
-    public static final boolean CoralWristInverted = false; 
+    public static final int WristMotorID = 13; 
+    public static final boolean WristInverted = false; 
+
+    public static final double MaxWristMargin = 1000;
+    public static final double MinWristMargin = -1000;
+    
+    public static final double kP = .005;
+    public static final double kI = 0;
+    public static final double kD = 0;
+
+    public static final double MaxPIDVelocity = .3;
+    public static final double MaxPIDAcceleration = .1;
+
+    public static final double PIDErrorAllowed = .1;
+  }
+
+  public static final class LimelightConstants {
+    public static final double ROTkP = .035;
+    public static final double RANGEkP = .4;
+
+    public static final double HORkP = .01;
+    public static final double MaxAlignSpeed = .2;
+  }
+
+  public static final class FieldConstants {
+    public static final double coralToCoralLength = Units.inchesToMeters(13.25);
+    public static final double coralFromCenter = coralToCoralLength / 2;
+
+    public static final double fieldWidth = 8.025;
   }
 
 }

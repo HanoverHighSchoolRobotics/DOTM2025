@@ -1,0 +1,43 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MidRedCageto4OClock"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "4OClockToRightFeeder"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightFeederTo5OClock"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5OClockToRightFeeder"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "RightFeederTo6OClock"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}

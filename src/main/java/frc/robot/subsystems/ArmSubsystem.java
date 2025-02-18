@@ -15,7 +15,6 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
-import frc.robot.Configs.Arm;
 import frc.robot.Constants.ArmConstants;
 
 public class ArmSubsystem extends SubsystemBase {
@@ -25,7 +24,7 @@ public class ArmSubsystem extends SubsystemBase {
   RelativeEncoder armEncoder;
 
   ProfiledPIDController armPIDController = new ProfiledPIDController(
-  ArmConstants.kP, ArmConstants.kI, ArmConstants.kD,
+    ArmConstants.kP, ArmConstants.kI, ArmConstants.kD,
     new TrapezoidProfile.Constraints(ArmConstants.MaxPIDVelocity, ArmConstants.MaxPIDAcceleration));
 
   private double PIDgoal;
@@ -47,8 +46,8 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // only uncomment if we are sure the profiled PID can work at all times, also add a failsafe button
-    // if(getArmPos() < PIDgoal - ArmConstants.PIDErrorAllowed && getArmPos() > PIDgoal + ArmConstants.PIDErrorAllowed && goalSet){
-    //   setArmSpeed(armPIDController.calculate(getArmPos()));
+    // if(getPosition() < PIDgoal - ArmConstants.PIDErrorAllowed && getPosition() > PIDgoal + ArmConstants.PIDErrorAllowed && goalSet){
+    //   setArmSpeed(armPIDController.calculate(getPosition()));
     // }
     // else
     // {
@@ -58,10 +57,10 @@ public class ArmSubsystem extends SubsystemBase {
 
   // sets the arm speed so long as isnt too high or low
   public void setArmSpeed(double speed){
-    if(getArmPos() < ArmConstants.MaxArmMargin && getArmPos() > ArmConstants.MinArmMargin){
+    if(getPosition() < ArmConstants.MaxArmMargin && getPosition() > ArmConstants.MinArmMargin){
       armMotor.set(speed);
     }
-    else if(getArmPos() >= ArmConstants.MaxArmMargin)
+    else if(getPosition() >= ArmConstants.MaxArmMargin)
     {
       if(speed < 0){
         armMotor.set(speed);
@@ -71,7 +70,7 @@ public class ArmSubsystem extends SubsystemBase {
         armMotor.stopMotor();
       }
     }
-    else if(getArmPos() <= ArmConstants.MinArmMargin)
+    else if(getPosition() <= ArmConstants.MinArmMargin)
     {
       if(speed > 0){
         armMotor.set(speed);
@@ -94,7 +93,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   // gets the arm position in ticks
-  public double getArmPos(){
+  public double getPosition(){
     return armEncoder.getPosition();
   }
 
@@ -102,7 +101,7 @@ public class ArmSubsystem extends SubsystemBase {
   // doesnt have a second failsafe for a goal too far
   public void manualGoToGoal(double goal){
     this.PIDgoal = goal;
-    setArmSpeed(armPIDController.calculate(getArmPos(), goal));
+    setArmSpeed(armPIDController.calculate(getPosition(), goal));
     goalSet = true;
   }
 
@@ -122,7 +121,7 @@ public class ArmSubsystem extends SubsystemBase {
   //   }
   // }
 
-  // public Command setGoal(double goal){
+  // public Command setGoalCmd(double goal){
   //   return runOnce(() -> { 
   //     this.PIDGoal = goal; 
   //   });
