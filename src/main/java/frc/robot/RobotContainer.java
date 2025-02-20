@@ -146,7 +146,6 @@ public class RobotContainer {
     startDriverButton.whileTrue(new DriveClickToAngle(m_robotDrive));
 
     JoystickButton backDriverButton = new JoystickButton(m_driverController, XboxController.Button.kBack.value);
-    // backDriverButton.whileTrue(m_robotDrive.pathFindThenFollowPath("PathFindThen3OClock"));
     backDriverButton.whileTrue(new LimelightHorizontalAlign(m_robotDrive));
 
     JoystickButton rightBumperDriverButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);

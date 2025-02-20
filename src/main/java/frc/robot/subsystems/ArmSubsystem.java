@@ -10,15 +10,17 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
 import frc.robot.Constants.ArmConstants;
 
 public class ArmSubsystem extends SubsystemBase {
-  /** Creates a new ExampleSubsystem. */
+
   SparkMax armMotor;
 
   RelativeEncoder armEncoder;
@@ -41,24 +43,39 @@ public class ArmSubsystem extends SubsystemBase {
     armEncoder.setPosition(0);
 
     goalSet = false;
+
+    armPIDController.setTolerance(ArmConstants.PIDErrorAllowed);
   }
 
   @Override
   public void periodic() {
-    // only uncomment if we are sure the profiled PID can work at all times, also add a failsafe button
-    // if(getPosition() < PIDgoal - ArmConstants.PIDErrorAllowed && getPosition() > PIDgoal + ArmConstants.PIDErrorAllowed && goalSet){
-    //   setArmSpeed(armPIDController.calculate(getPosition()));
-    // }
-    // else
-    // {
-    //   armMotor.stopMotor();
-    // }
+
+    if(goalSet && !armPIDController.atSetpoint()){
+      SmartDashboard.putBoolean("Trying to go to goal", true);
+      setArmSpeed(MathUtil.clamp(armPIDController.calculate(getPosition(), PIDgoal), -.75, .75));
+    }
+    else if (goalSet)
+    {
+      SmartDashboard.putBoolean("Trying to go to goal", false);
+      armMotor.stopMotor();
+    }
+    //test to make it so when the pid gets enabled, it doesnt go to last setpoint
+    else
+    {
+      PIDgoal = getPosition();
+    }
+
+    SmartDashboard.putNumber("Arm Encoder Reading", getPosition());
+    SmartDashboard.putNumber("Calculated Arm Speed", armPIDController.calculate(getPosition(), PIDgoal));
+    SmartDashboard.putNumber("Arm Goal", PIDgoal);
+    SmartDashboard.putString("Arm PID Goal", armPIDController.getGoal().toString());
   }
 
   // sets the arm speed so long as isnt too high or low
   public void setArmSpeed(double speed){
     if(getPosition() < ArmConstants.MaxArmMargin && getPosition() > ArmConstants.MinArmMargin){
       armMotor.set(speed);
+      SmartDashboard.putBoolean("Within Range", true);
     }
     else if(getPosition() >= ArmConstants.MaxArmMargin)
     {
@@ -69,6 +86,7 @@ public class ArmSubsystem extends SubsystemBase {
       {
         armMotor.stopMotor();
       }
+      SmartDashboard.putBoolean("Within Range", false);
     }
     else if(getPosition() <= ArmConstants.MinArmMargin)
     {
@@ -79,10 +97,12 @@ public class ArmSubsystem extends SubsystemBase {
       {
         armMotor.stopMotor();
       }
+      SmartDashboard.putBoolean("Within Range", false);
     }
     else
     {
       armMotor.stopMotor();
+      SmartDashboard.putBoolean("Within Range", false);
     }
   }
 
@@ -97,34 +117,29 @@ public class ArmSubsystem extends SubsystemBase {
     return armEncoder.getPosition();
   }
 
-  // can be called to manually make the PID go to our desired goal
-  // doesnt have a second failsafe for a goal too far
-  public void manualGoToGoal(double goal){
-    this.PIDgoal = goal;
-    setArmSpeed(armPIDController.calculate(getPosition(), goal));
-    goalSet = true;
+  // sets a goal and for as long as the robot is on
+  // the arm will do its best to reach this goal and is used through periodic
+  public void setGoal(double goal){
+    if(goal <= ArmConstants.MaxArmMargin && goal >= ArmConstants.MinArmMargin){
+      this.PIDgoal = goal;
+      armPIDController.setGoal(goal);
+      goalSet = true;
+    }
   }
 
-  public Command autoManualGoToGoal(double goal){
+  public Command setGoalCmd(double goal){
     return runOnce(
-      () -> manualGoToGoal(goal)
+      () -> setGoal(goal)
     );
   }
 
-  // sets a goal and for as long as the robot is on
-  // the arm will do its best to reach this goal and is used through periodic
-  // public void setGoal(double goal){
-  //   this.PIDgoal = goal;
-  //   if(goal < ArmConstants.MaxArmMargin && goal > ArmConstants.MinArmMargin){
-  //     armPIDController.setGoal(goal);
-  //     goalSet = true;
-  //   }
-  // }
+  public void disablePID(){
+    this.goalSet = false;
+  }
 
-  // public Command setGoalCmd(double goal){
-  //   return runOnce(() -> { 
-  //     this.PIDGoal = goal; 
-  //   });
-  // }
-
+  public Command disablePIDCmd(){
+    return runOnce(
+      () -> disablePID()
+    );
+  }
 }

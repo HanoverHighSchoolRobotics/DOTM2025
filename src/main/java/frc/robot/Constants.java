@@ -165,20 +165,20 @@ public final class Constants {
 
   public static final class ArmConstants {
     // subsystem constants
-    public static final int ArmMotorID = 13;
+    public static final int ArmMotorID = 14;
     public static final boolean ArmMotorInverted = false;
 
-    public static final double MaxArmMargin = 100000;
-    public static final double MinArmMargin = -100000;
+    public static final double MaxArmMargin = 500;
+    public static final double MinArmMargin = -500;
 
-    public static final double kP = .005;
+    public static final double kP = .05;
     public static final double kI = 0;
     public static final double kD = 0;
 
-    public static final double MaxPIDVelocity = .3;
-    public static final double MaxPIDAcceleration = .1;
+    public static final double MaxPIDVelocity = 20;
+    public static final double MaxPIDAcceleration = 10;
 
-    public static final double PIDErrorAllowed = .1;
+    public static final double PIDErrorAllowed = .2;
 
     // command input constants
     public static final double ArmSpeed = .15;

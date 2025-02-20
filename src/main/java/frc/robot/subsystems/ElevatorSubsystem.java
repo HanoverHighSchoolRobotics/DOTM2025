@@ -10,22 +10,24 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
 import frc.robot.Constants.ElevatorConstants;
 
 public class ElevatorSubsystem extends SubsystemBase {
-  /** Creates a new ExampleSubsystem. */
-  SparkMax leftElevatorMotor;
+
   SparkMax rightElevatorMotor;
+  SparkMax leftElevatorMotor;
 
   RelativeEncoder elevatorEncoder;
 
   ProfiledPIDController elevatorPIDController = new ProfiledPIDController(
-  ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD,
+    ElevatorConstants.kP, ElevatorConstants.kI, ElevatorConstants.kD,
     new TrapezoidProfile.Constraints(ElevatorConstants.MaxPIDVelocity, ElevatorConstants.MaxPIDAcceleration));
 
   private double PIDgoal;
@@ -37,6 +39,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     leftElevatorMotor.configure(Configs.Elevator.leftElevatorMotorConfig, ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
+
     rightElevatorMotor.configure(Configs.Elevator.rightElevatorMotorConfig, ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
 
@@ -45,24 +48,39 @@ public class ElevatorSubsystem extends SubsystemBase {
     elevatorEncoder.setPosition(0);
 
     goalSet = false;
+
+    elevatorPIDController.setTolerance(ElevatorConstants.PIDErrorAllowed);
   }
 
   @Override
   public void periodic() {
-    // only uncomment if we are sure the profiled PID can work at all times, also add a failsafe button
-    // if(getPosition() < PIDgoal - ElevatorConstants.PIDErrorAllowed && getPosition() > PIDgoal + 
-    // ElevatorConstants.PIDErrorAllowed && goalSet){
-    //   setElevatorSpeeds(elevatorPIDController.calculate(getPosition()));
-    // }
-    // else
-    // {
-    //   leftElevatorMotor.stopMotor();
-    // }
+
+    if(goalSet && elevatorPIDController.atSetpoint()){
+      SmartDashboard.putBoolean("Trying to go to goal", true);
+      setElevatorSpeed(MathUtil.clamp(elevatorPIDController.calculate(getPosition(), PIDgoal), -.75, .75));
+    }
+    else if (goalSet)
+    {
+      SmartDashboard.putBoolean("Trying to go to goal", false);
+      leftElevatorMotor.stopMotor();
+    }
+    //test to make it so when the pid gets enabled, it doesnt go to last setpoint
+    else
+    {
+      PIDgoal = getPosition();
+    }
+
+    SmartDashboard.putNumber("Arm Encoder Reading", getPosition());
+    SmartDashboard.putNumber("Calculated Arm Speed",elevatorPIDController.calculate(getPosition(), PIDgoal));
+    SmartDashboard.putNumber("Arm Goal", PIDgoal);
+    SmartDashboard.putString("Arm PID Goal",elevatorPIDController.getGoal().toString());
   }
 
-  public void setElevatorSpeeds(double speed){
+  // sets the elevator speed so long as isnt too high or low
+  public void setElevatorSpeed(double speed){
     if(getPosition() < ElevatorConstants.MaxElevatorMargin && getPosition() > ElevatorConstants.MinElevatorMargin){
       leftElevatorMotor.set(speed);
+      SmartDashboard.putBoolean("Within Range", true);
     }
     else if(getPosition() >= ElevatorConstants.MaxElevatorMargin)
     {
@@ -73,6 +91,7 @@ public class ElevatorSubsystem extends SubsystemBase {
       {
         leftElevatorMotor.stopMotor();
       }
+      SmartDashboard.putBoolean("Within Range", false);
     }
     else if(getPosition() <= ElevatorConstants.MinElevatorMargin)
     {
@@ -83,16 +102,18 @@ public class ElevatorSubsystem extends SubsystemBase {
       {
         leftElevatorMotor.stopMotor();
       }
+      SmartDashboard.putBoolean("Within Range", false);
     }
     else
     {
       leftElevatorMotor.stopMotor();
+      SmartDashboard.putBoolean("Within Range", false);
     }
   }
 
   public Command autoSetElevatorSpeed(double speed){
     return runOnce(
-      () -> setElevatorSpeeds(speed)
+      () -> setElevatorSpeed(speed)
     );
   }
 
@@ -101,35 +122,30 @@ public class ElevatorSubsystem extends SubsystemBase {
     return elevatorEncoder.getPosition();
   }
 
-  // can be called to manually make the PID go to our desired goal
-  // doesnt have a second failsafe for a goal too far
-  public void manualGoToGoal(double goal){
-    this.PIDgoal = goal;
-    setElevatorSpeeds(elevatorPIDController.calculate(getPosition(), goal));
-    goalSet = true;
+  // sets a goal and for as long as the robot is on
+  // the elevator will do its best to reach this goal and is used through periodic
+  public void setGoal(double goal){
+    if(goal <= ElevatorConstants.MaxElevatorMargin && goal >= ElevatorConstants.MinElevatorMargin){
+      this.PIDgoal = goal;
+      elevatorPIDController.setGoal(goal);
+      goalSet = true;
+    }
   }
 
-  public Command autoManualGoToGoal(double goal){
+  public Command setGoalCmd(double goal){
     return runOnce(
-      () -> manualGoToGoal(goal)
+      () -> setGoal(goal)
     );
   }
 
-  // sets a goal and for as long as the robot is on
-  // the elevator will do its best to reach this goal and is used through periodic
-  // public void setGoal(double goal){
-  //   this.PIDgoal = goal;
-  //   if(goal < ElevatorConstants.MaxElevatorMargin && goal > ElevatorConstants.MinElevatorMargin){
-  //     elevatorPIDController.setGoal(goal);
-  //     goalSet = true;
-  //   }
-  // }
+  public void disablePID(){
+    this.goalSet = false;
+  }
 
-  // public Command setGoal(double goal){
-  //   return runOnce(() -> { 
-  //     this.PIDGoal = goal; 
-  //   });
-  // }
-
-
+  public Command disablePIDCmd(){
+    return runOnce(
+      () -> disablePID()
+    );
+  }
 }
+

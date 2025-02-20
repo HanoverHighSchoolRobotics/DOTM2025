@@ -5,25 +5,25 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
 import frc.robot.Constants.WristConstants;
 
-
-
 public class WristSubsystem extends SubsystemBase {
- 
+
   SparkMax wristMotor;
 
-  RelativeEncoder wristEncoder; 
+  RelativeEncoder wristEncoder;
 
   ProfiledPIDController wristPIDController = new ProfiledPIDController(
     WristConstants.kP, WristConstants.kI, WristConstants.kD,
@@ -31,30 +31,51 @@ public class WristSubsystem extends SubsystemBase {
 
   private double PIDgoal;
   private boolean goalSet;
-  
+
   public WristSubsystem() {
-
-
-    wristMotor = new SparkMax(WristConstants.WristMotorID, MotorType.kBrushless); 
+    wristMotor = new SparkMax(WristConstants.WristMotorID, MotorType.kBrushless);
 
     wristMotor.configure(Configs.Wrist.wristMotorConfig, ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
 
-    wristEncoder = wristMotor.getEncoder(); 
-
+    wristEncoder = wristMotor.getEncoder();
+    
     wristEncoder.setPosition(0);
 
     goalSet = false;
+
+    wristPIDController.setTolerance(WristConstants.PIDErrorAllowed);
   }
 
-  public double getPosition() {
-    return wristEncoder.getPosition();
+  @Override
+  public void periodic() {
+
+    if(goalSet && !wristPIDController.atSetpoint()){
+      SmartDashboard.putBoolean("Trying to go to goal", true);
+      setWristSpeed(MathUtil.clamp(wristPIDController.calculate(getPosition(), PIDgoal), -.75, .75));
+    }
+    else if (goalSet)
+    {
+      SmartDashboard.putBoolean("Trying to go to goal", false);
+      wristMotor.stopMotor();
+    }
+    //test to make it so when the pid gets enabled, it doesnt go to last setpoint
+    else
+    {
+      PIDgoal = getPosition();
+    }
+
+    SmartDashboard.putNumber("Arm Encoder Reading", getPosition());
+    SmartDashboard.putNumber("Calculated Arm Speed", wristPIDController.calculate(getPosition(), PIDgoal));
+    SmartDashboard.putNumber("Arm Goal", PIDgoal);
+    SmartDashboard.putString("Arm PID Goal", wristPIDController.getGoal().toString());
   }
 
-  // sets the arm speed so long as isnt too high or low
+  // sets the wrist speed so long as isnt too high or low
   public void setWristSpeed(double speed){
     if(getPosition() < WristConstants.MaxWristMargin && getPosition() > WristConstants.MinWristMargin){
       wristMotor.set(speed);
+      SmartDashboard.putBoolean("Within Range", true);
     }
     else if(getPosition() >= WristConstants.MaxWristMargin)
     {
@@ -65,6 +86,7 @@ public class WristSubsystem extends SubsystemBase {
       {
         wristMotor.stopMotor();
       }
+      SmartDashboard.putBoolean("Within Range", false);
     }
     else if(getPosition() <= WristConstants.MinWristMargin)
     {
@@ -75,30 +97,14 @@ public class WristSubsystem extends SubsystemBase {
       {
         wristMotor.stopMotor();
       }
+      SmartDashboard.putBoolean("Within Range", false);
     }
     else
     {
       wristMotor.stopMotor();
+      SmartDashboard.putBoolean("Within Range", false);
     }
   }
-
-  /**
-   * Example command factory method.
-   *
-   * @return a command
-   */
-
-  // @Override
-  // public void periodic() {
-  //       // only uncomment if we are sure the profiled PID can work at all times, also add a failsafe button
-  //   if(getPosition() < PIDgoal - WristConstants.PIDErrorAllowed && getPosition() > PIDgoal + WristConstants.PIDErrorAllowed && goalSet){
-  //     setWristSpeed(wristPIDController.calculate(getPosition()));
-  //   }
-  //   else
-  //   {
-  //     wristMotor.stopMotor();
-  //   }
-  // }
 
   public Command autoSetWristSpeed(double speed){
     return runOnce(
@@ -106,34 +112,35 @@ public class WristSubsystem extends SubsystemBase {
     );
   }
 
-  // can be called to manually make the PID go to our desired goal
-  // doesnt have a second failsafe for a goal too far
-  public void manualGoToGoal(double goal){
-    this.PIDgoal = goal;
-    setWristSpeed(wristPIDController.calculate(getPosition(), goal));
-    goalSet = true;
-  }
-
-  public Command autoManualGoToGoal(double goal){
-    return runOnce(
-      () -> manualGoToGoal(goal)
-    );
+  // gets the wrist position in ticks
+  public double getPosition(){
+    return wristEncoder.getPosition();
   }
 
   // sets a goal and for as long as the robot is on
-  // the arm will do its best to reach this goal and is used through periodic
-  // public void setGoal(double goal){
-  //   this.PIDgoal = goal;
-  //   if(goal < WristConstants.MaxWristMargin && goal > WristConstants.MinWristMargin){
-  //     wristPIDController.setGoal(goal);
-  //     goalSet = true;
-  //   }
-  // }
+  // the wrist will do its best to reach this goal and is used through periodic
+  public void setGoal(double goal){
+    if(goal <= WristConstants.MaxWristMargin && goal >= WristConstants.MinWristMargin){
+      this.PIDgoal = goal;
+      wristPIDController.setGoal(goal);
+      goalSet = true;
+    }
+  }
 
-  // public Command setGoalCmd(double goal){
-  //   return runOnce(() -> { 
-  //     this.PIDgoal = goal; 
-  //   });
-  // }
+  public Command setGoalCmd(double goal){
+    return runOnce(
+      () -> setGoal(goal)
+    );
+  }
 
+  public void disablePID(){
+    this.goalSet = false;
+  }
+
+  public Command disablePIDCmd(){
+    return runOnce(
+      () -> disablePID()
+    );
+  }
 }
+
