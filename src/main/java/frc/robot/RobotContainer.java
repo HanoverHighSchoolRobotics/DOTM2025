@@ -179,43 +179,43 @@ public class RobotContainer {
       aAuxButton.whileTrue(m_wrist.SetWristSpeedCmd(WristConstants.WristSpeed))
       .onFalse(m_wrist.SetWristSpeedCmd(0));
     // set elevator to a setpoint
-      aAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralOnePos));
+      // aAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralOnePos));
 
     JoystickButton bAuxButton = new JoystickButton(m_auxController, XboxController.Button.kB.value);
     // set wrist speed negative
       bAuxButton.whileTrue(m_wrist.SetWristSpeedCmd(-1 * WristConstants.WristSpeed))
       .onFalse(m_wrist.SetWristSpeedCmd(0));
     //set elevator to a setpoint
-      bAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralTwoPos));
+      // bAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralTwoPos));
 
     JoystickButton xAuxButton = new JoystickButton(m_auxController, XboxController.Button.kX.value);
     // set elevator manual positive
       xAuxButton.onTrue(m_elevator.SetElevatorSpeedCmd(ElevatorConstants.ElevatorSpeed))
       .onFalse(m_elevator.SetElevatorSpeedCmd(0));
     // set elevator to a setpoint
-      xAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralThreePos));
+      // xAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralThreePos));
 
     JoystickButton yAuxButton = new JoystickButton(m_auxController, XboxController.Button.kY.value);
     // set elevator manual negative
       yAuxButton.onTrue(m_elevator.SetElevatorSpeedCmd(-1 * ElevatorConstants.ElevatorSpeed))
       .onFalse(m_elevator.SetElevatorSpeedCmd(0));
     // set elevator to a setpoint
-      yAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralFourPos));
+      // yAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralFourPos));
 
     JoystickButton startAuxButton = new JoystickButton(m_auxController, XboxController.Button.kStart.value);
     // set arm manual positive
       startAuxButton.onTrue(m_arm.SetArmSpeedCmd(ArmConstants.ArmSpeed))
       .onFalse(m_arm.SetArmSpeedCmd(0));
     // set elevator to a setpoint
-      startAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.StationPos));
+      // startAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.StationPos));
 
     JoystickButton backAuxButton = new JoystickButton(m_auxController, XboxController.Button.kBack.value);
     // set arm manual negative
       backAuxButton.whileTrue(m_arm.SetArmSpeedCmd(-1 * ArmConstants.ArmSpeed))
       .onFalse(m_arm.SetArmSpeedCmd(0));
     // set arm to a setpoint
-      backAuxButton.toggleOnTrue(m_arm.setGoalCmd(ArmConstants.HighPos))
-      .toggleOnFalse(m_arm.setGoalCmd(ArmConstants.LowPos));
+      // backAuxButton.toggleOnTrue(m_arm.setGoalCmd(ArmConstants.HighPos))
+      // .toggleOnFalse(m_arm.setGoalCmd(ArmConstants.LowPos));
 
     JoystickButton rightBumperAuxButton = new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value);
     // sets the algae intake inwards
