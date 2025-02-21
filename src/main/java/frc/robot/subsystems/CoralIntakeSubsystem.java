@@ -33,13 +33,13 @@ public class CoralIntakeSubsystem extends SubsystemBase {
     intakeMotor.set(speed);
   }
 
-  public Command autoCoralIntake(double speed){
+  public Command CoralIntakeCmd(double speed){
     return runOnce(
       () -> setIntake(speed)
     );
   }
 
-  public Command autoAutoCoralIntake(double speed, double timeOut){
+  public Command autoCoralIntake(double speed, double timeOut){
     return run(
       () -> setIntake(speed)
       ).withTimeout(timeOut);

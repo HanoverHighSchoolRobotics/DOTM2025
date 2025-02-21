@@ -1,10 +1,13 @@
 package frc.robot;
 
+import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.CoralIntakeConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ModuleConstants;
@@ -114,4 +117,13 @@ public final class Configs {
 
     }
 
+    public static final class Climber {
+        public static final SparkMaxConfig climberMotorConfig = new SparkMaxConfig();
+
+        static {
+                climberMotorConfig
+                        .idleMode(IdleMode.kBrake)
+                        .inverted(ClimberConstants.ClimberInverted);
+        }
+    }
 }

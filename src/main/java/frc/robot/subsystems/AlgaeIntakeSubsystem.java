@@ -35,13 +35,13 @@ public class AlgaeIntakeSubsystem extends SubsystemBase {
     intakeMotor.set(speed);
   }
 
-  public Command autoAlgaeIntake(double speed) {
+  public Command AlgaeIntakeCmd(double speed) {
     return runOnce(
       () -> setIntake(speed)
     );
   }
 
-  public Command autoAutoAlgaeIntake(double speed, double timeOut){
+  public Command autoAlgaeIntake(double speed, double timeOut){
     return run(
       () -> setIntake(speed)
       ).withTimeout(timeOut);

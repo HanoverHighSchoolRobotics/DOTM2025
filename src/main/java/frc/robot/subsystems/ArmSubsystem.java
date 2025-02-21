@@ -51,12 +51,10 @@ public class ArmSubsystem extends SubsystemBase {
   public void periodic() {
 
     if(goalSet && !armPIDController.atSetpoint()){
-      SmartDashboard.putBoolean("Trying to go to goal", true);
       setArmSpeed(MathUtil.clamp(armPIDController.calculate(getPosition(), PIDgoal), -.75, .75));
     }
     else if (goalSet)
     {
-      SmartDashboard.putBoolean("Trying to go to goal", false);
       armMotor.stopMotor();
     }
     //test to make it so when the pid gets enabled, it doesnt go to last setpoint
@@ -65,7 +63,7 @@ public class ArmSubsystem extends SubsystemBase {
       PIDgoal = getPosition();
     }
 
-    SmartDashboard.putNumber("Arm Encoder Reading", getPosition());
+    SmartDashboard.putNumber("Arm Encoder", getPosition());
     SmartDashboard.putNumber("Calculated Arm Speed", armPIDController.calculate(getPosition(), PIDgoal));
     SmartDashboard.putNumber("Arm Goal", PIDgoal);
     SmartDashboard.putString("Arm PID Goal", armPIDController.getGoal().toString());
@@ -73,11 +71,12 @@ public class ArmSubsystem extends SubsystemBase {
 
   // sets the arm speed so long as isnt too high or low
   public void setArmSpeed(double speed){
-    if(getPosition() < ArmConstants.MaxArmMargin && getPosition() > ArmConstants.MinArmMargin){
+    double position = getPosition();
+
+    if(position < ArmConstants.MaxArmMargin && position > ArmConstants.MinArmMargin){
       armMotor.set(speed);
-      SmartDashboard.putBoolean("Within Range", true);
     }
-    else if(getPosition() >= ArmConstants.MaxArmMargin)
+    else if(position >= ArmConstants.MaxArmMargin)
     {
       if(speed < 0){
         armMotor.set(speed);
@@ -86,9 +85,8 @@ public class ArmSubsystem extends SubsystemBase {
       {
         armMotor.stopMotor();
       }
-      SmartDashboard.putBoolean("Within Range", false);
     }
-    else if(getPosition() <= ArmConstants.MinArmMargin)
+    else if(position <= ArmConstants.MinArmMargin)
     {
       if(speed > 0){
         armMotor.set(speed);
@@ -97,16 +95,14 @@ public class ArmSubsystem extends SubsystemBase {
       {
         armMotor.stopMotor();
       }
-      SmartDashboard.putBoolean("Within Range", false);
     }
     else
     {
       armMotor.stopMotor();
-      SmartDashboard.putBoolean("Within Range", false);
     }
   }
 
-  public Command autoSetArmSpeed(double speed){
+  public Command SetArmSpeedCmd(double speed){
     return runOnce(
       () -> setArmSpeed(speed)
     );

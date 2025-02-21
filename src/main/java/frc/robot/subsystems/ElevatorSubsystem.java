@@ -56,12 +56,10 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
 
     if(goalSet && elevatorPIDController.atSetpoint()){
-      SmartDashboard.putBoolean("Trying to go to goal", true);
       setElevatorSpeed(MathUtil.clamp(elevatorPIDController.calculate(getPosition(), PIDgoal), -.75, .75));
     }
     else if (goalSet)
     {
-      SmartDashboard.putBoolean("Trying to go to goal", false);
       leftElevatorMotor.stopMotor();
     }
     //test to make it so when the pid gets enabled, it doesnt go to last setpoint
@@ -70,19 +68,20 @@ public class ElevatorSubsystem extends SubsystemBase {
       PIDgoal = getPosition();
     }
 
-    SmartDashboard.putNumber("Arm Encoder Reading", getPosition());
-    SmartDashboard.putNumber("Calculated Arm Speed",elevatorPIDController.calculate(getPosition(), PIDgoal));
-    SmartDashboard.putNumber("Arm Goal", PIDgoal);
-    SmartDashboard.putString("Arm PID Goal",elevatorPIDController.getGoal().toString());
+    SmartDashboard.putNumber("Elevator Encoder Reading", getPosition());
+    SmartDashboard.putNumber("Calculated Elevator Speed",elevatorPIDController.calculate(getPosition(), PIDgoal));
+    SmartDashboard.putNumber("ELevator Goal", PIDgoal);
+    SmartDashboard.putString("Elevator PID Goal", elevatorPIDController.getGoal().toString());
   }
 
   // sets the elevator speed so long as isnt too high or low
   public void setElevatorSpeed(double speed){
-    if(getPosition() < ElevatorConstants.MaxElevatorMargin && getPosition() > ElevatorConstants.MinElevatorMargin){
+    double position = getPosition();
+
+    if(position < ElevatorConstants.MaxElevatorMargin && position > ElevatorConstants.MinElevatorMargin){
       leftElevatorMotor.set(speed);
-      SmartDashboard.putBoolean("Within Range", true);
     }
-    else if(getPosition() >= ElevatorConstants.MaxElevatorMargin)
+    else if(position >= ElevatorConstants.MaxElevatorMargin)
     {
       if(speed < 0){
         leftElevatorMotor.set(speed);
@@ -91,9 +90,8 @@ public class ElevatorSubsystem extends SubsystemBase {
       {
         leftElevatorMotor.stopMotor();
       }
-      SmartDashboard.putBoolean("Within Range", false);
     }
-    else if(getPosition() <= ElevatorConstants.MinElevatorMargin)
+    else if(position <= ElevatorConstants.MinElevatorMargin)
     {
       if(speed > 0){
         leftElevatorMotor.set(speed);
@@ -102,16 +100,14 @@ public class ElevatorSubsystem extends SubsystemBase {
       {
         leftElevatorMotor.stopMotor();
       }
-      SmartDashboard.putBoolean("Within Range", false);
     }
     else
     {
       leftElevatorMotor.stopMotor();
-      SmartDashboard.putBoolean("Within Range", false);
     }
   }
 
-  public Command autoSetElevatorSpeed(double speed){
+  public Command SetElevatorSpeedCmd(double speed){
     return runOnce(
       () -> setElevatorSpeed(speed)
     );

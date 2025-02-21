@@ -142,6 +142,13 @@ public final class Constants {
 
     // command input constants
     public static final double ElevatorSpeed = .15;
+
+    // PID Positions
+    public static final double CoralOnePos = 0;
+    public static final double CoralTwoPos = 0;
+    public static final double CoralThreePos = 0;
+    public static final double CoralFourPos = 0;
+    public static final double StationPos = 0;
   }
   public static final class CoralIntakeConstants {
     // subsystem constants
@@ -182,6 +189,10 @@ public final class Constants {
 
     // command input constants
     public static final double ArmSpeed = .15;
+
+    // PID Positions
+    public static final double LowPos = 0;
+    public static final double HighPos = 0;
   }
 
   public static final class WristConstants {
@@ -200,6 +211,8 @@ public final class Constants {
     public static final double MaxPIDAcceleration = .1;
 
     public static final double PIDErrorAllowed = .1;
+    // command input constants
+    public static final double WristSpeed = .15;
   }
 
   public static final class LimelightConstants {
@@ -215,6 +228,16 @@ public final class Constants {
     public static final double coralFromCenter = coralToCoralLength / 2;
 
     public static final double fieldWidth = 8.025;
+  }
+
+  public static final class ClimberConstants {
+    // subsystem constants
+    public static final int ClimberMotorID = 0;
+    public static final boolean ClimberInverted = false;
+    public static final double MaxClimbMargin = 100000;
+    public static final double MinClimbMargin = -100000;
+    public static final double ClimbUpSpeed = .15;
+    public static final double ClimbDownSpeed = .15;
   }
 
 }

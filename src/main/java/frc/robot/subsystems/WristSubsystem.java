@@ -51,12 +51,10 @@ public class WristSubsystem extends SubsystemBase {
   public void periodic() {
 
     if(goalSet && !wristPIDController.atSetpoint()){
-      SmartDashboard.putBoolean("Trying to go to goal", true);
       setWristSpeed(MathUtil.clamp(wristPIDController.calculate(getPosition(), PIDgoal), -.75, .75));
     }
     else if (goalSet)
     {
-      SmartDashboard.putBoolean("Trying to go to goal", false);
       wristMotor.stopMotor();
     }
     //test to make it so when the pid gets enabled, it doesnt go to last setpoint
@@ -65,19 +63,20 @@ public class WristSubsystem extends SubsystemBase {
       PIDgoal = getPosition();
     }
 
-    SmartDashboard.putNumber("Arm Encoder Reading", getPosition());
-    SmartDashboard.putNumber("Calculated Arm Speed", wristPIDController.calculate(getPosition(), PIDgoal));
-    SmartDashboard.putNumber("Arm Goal", PIDgoal);
-    SmartDashboard.putString("Arm PID Goal", wristPIDController.getGoal().toString());
+    SmartDashboard.putNumber("Wrist Encoder", getPosition());
+    SmartDashboard.putNumber("Calculated Wrist Speed", wristPIDController.calculate(getPosition(), PIDgoal));
+    SmartDashboard.putNumber("Wrist Goal", PIDgoal);
+    SmartDashboard.putString("Wrist PID Goal", wristPIDController.getGoal().toString());
   }
 
   // sets the wrist speed so long as isnt too high or low
   public void setWristSpeed(double speed){
-    if(getPosition() < WristConstants.MaxWristMargin && getPosition() > WristConstants.MinWristMargin){
+    double position = getPosition();
+
+    if(position < WristConstants.MaxWristMargin && position > WristConstants.MinWristMargin){
       wristMotor.set(speed);
-      SmartDashboard.putBoolean("Within Range", true);
     }
-    else if(getPosition() >= WristConstants.MaxWristMargin)
+    else if(position >= WristConstants.MaxWristMargin)
     {
       if(speed < 0){
         wristMotor.set(speed);
@@ -86,9 +85,8 @@ public class WristSubsystem extends SubsystemBase {
       {
         wristMotor.stopMotor();
       }
-      SmartDashboard.putBoolean("Within Range", false);
     }
-    else if(getPosition() <= WristConstants.MinWristMargin)
+    else if(position <= WristConstants.MinWristMargin)
     {
       if(speed > 0){
         wristMotor.set(speed);
@@ -97,16 +95,14 @@ public class WristSubsystem extends SubsystemBase {
       {
         wristMotor.stopMotor();
       }
-      SmartDashboard.putBoolean("Within Range", false);
     }
     else
     {
       wristMotor.stopMotor();
-      SmartDashboard.putBoolean("Within Range", false);
     }
   }
 
-  public Command autoSetWristSpeed(double speed){
+  public Command SetWristSpeedCmd(double speed){
     return runOnce(
       () -> setWristSpeed(speed)
     );
