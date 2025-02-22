@@ -93,6 +93,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.05;
     public static final int kAuxControllerPort = 1;
+    public static final double kAuxDeadband = 0.05;
 
     public static final double kFASTDRIVESPEEDLIMITER = .4;
     public static final double kFASTROTSPEEDLIMITER = .4;
@@ -182,6 +183,8 @@ public final class Constants {
     public static final double kI = 0;
     public static final double kD = 0;
 
+    public static final double MaxPIDSetSpeed = .4;
+
     public static final double MaxPIDVelocity = 20;
     public static final double MaxPIDAcceleration = 10;
 
@@ -190,7 +193,7 @@ public final class Constants {
     // command input constants
     public static final double ArmSpeed = .15;
 
-    // PID Positions
+    // PID Positions - not used currently
     public static final double LowPos = 0;
     public static final double HighPos = 0;
   }
@@ -203,9 +206,11 @@ public final class Constants {
     public static final double MaxWristMargin = 1000;
     public static final double MinWristMargin = -1000;
     
-    public static final double kP = .005;
+    public static final double kP = .05;
     public static final double kI = 0;
     public static final double kD = 0;
+
+    public static final double MaxPIDSetSpeed = .4;
 
     public static final double MaxPIDVelocity = .3;
     public static final double MaxPIDAcceleration = .1;
@@ -213,6 +218,8 @@ public final class Constants {
     public static final double PIDErrorAllowed = .1;
     // command input constants
     public static final double WristSpeed = .15;
+
+    
   }
 
   public static final class LimelightConstants {

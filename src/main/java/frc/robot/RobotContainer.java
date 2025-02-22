@@ -104,12 +104,23 @@ public class RobotContainer {
                 true),
             m_robotDrive));
 
+    m_arm.setDefaultCommand(
+      new RunCommand(
+        () -> m_arm.setArmSpeedVoidCmd(MathUtil.applyDeadband(m_driverController.getLeftY() * ArmConstants.ArmSpeed, OIConstants.kAuxDeadband)), 
+        m_arm));
+
+    m_wrist.setDefaultCommand(
+      new RunCommand(
+        () -> m_wrist.setWristSpeedVoidCmd(MathUtil.applyDeadband(m_driverController.getRightY() * WristConstants.WristSpeed, OIConstants.kAuxDeadband)), 
+        m_wrist));
+
     // Build an auto chooser. This will use Commands.none() as the default option.
     configureAutoCommands();
 
     autoChooser = AutoBuilder.buildAutoChooser();
 
     autoChooser.addOption("Test Auto (Example Auto)", new PathPlannerAuto("Example Auto"));
+    autoChooser.addOption("Auto 6 In Dashboard", new PathPlannerAuto("Auto6"));
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
@@ -180,23 +191,23 @@ public class RobotContainer {
 
     .whileTrue(m_climb.setClimbSpeedCmd(-1 * ClimberConstants.ClimbDownSpeed));
     
-    m_auxController.a()
+    // m_auxController.a()
     // set wrist speed positive
-      .whileTrue(m_wrist.SetWristSpeedCmd(WristConstants.WristSpeed))
-      .onFalse(m_wrist.SetWristSpeedCmd(0));
+      // .whileTrue(m_wrist.SetWristSpeedCmd(WristConstants.WristSpeed))
+      // .onFalse(m_wrist.SetWristSpeedCmd(0));
     // set elevator to a setpoint
       // aAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralOnePos));
 
-    m_auxController.b()
+    // m_auxController.b()
     // set wrist speed negative
-      .whileTrue(m_wrist.SetWristSpeedCmd(-1 * WristConstants.WristSpeed))
-      .onFalse(m_wrist.SetWristSpeedCmd(0));
+      // .whileTrue(m_wrist.SetWristSpeedCmd(-1 * WristConstants.WristSpeed))
+      // .onFalse(m_wrist.SetWristSpeedCmd(0));
     //set elevator to a setpoint
       // bAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralTwoPos));
 
     m_auxController.x()
     // set elevator manual positive
-      .onTrue(m_elevator.SetElevatorSpeedCmd(ElevatorConstants.ElevatorSpeed))
+      .whileTrue(m_elevator.SetElevatorSpeedCmd(ElevatorConstants.ElevatorSpeed))
       .onFalse(m_elevator.SetElevatorSpeedCmd(0));
     // set elevator to a setpoint
       // xAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralThreePos));
@@ -208,17 +219,17 @@ public class RobotContainer {
     // set elevator to a setpoint
       // yAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralFourPos));
 
-    m_auxController.start()
+    // m_auxController.start()
     // set arm manual positive
-      .onTrue(m_arm.SetArmSpeedCmd(ArmConstants.ArmSpeed))
-      .onFalse(m_arm.SetArmSpeedCmd(0));
+      // .onTrue(m_arm.SetArmSpeedCmd(ArmConstants.ArmSpeed))
+      // .onFalse(m_arm.SetArmSpeedCmd(0));
     // set elevator to a setpoint
       // startAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.StationPos));
 
-    m_auxController.back()
+    // m_auxController.back()
     // set arm manual negative
-      .whileTrue(m_arm.SetArmSpeedCmd(-1 * ArmConstants.ArmSpeed))
-      .onFalse(m_arm.SetArmSpeedCmd(0));
+      // .whileTrue(m_arm.SetArmSpeedCmd(-1 * ArmConstants.ArmSpeed))
+      // .onFalse(m_arm.SetArmSpeedCmd(0));
     // set arm to a setpoint
       // backAuxButton.toggleOnTrue(m_arm.setGoalCmd(ArmConstants.HighPos))
       // .toggleOnFalse(m_arm.setGoalCmd(ArmConstants.LowPos));
@@ -233,28 +244,25 @@ public class RobotContainer {
       .whileTrue(m_algaeIntake.AlgaeIntakeCmd(-1 * AlgaeIntakeConstants.AlgaeIntakeSpeed))
       .onFalse(m_algaeIntake.AlgaeIntakeCmd(0));
 
-    m_auxController.rightStick()
+    // m_auxController.rightStick()
+    // sets the coral intake inwards
+    //   .whileTrue(m_coralIntake.CoralIntakeCmd(CoralIntakeConstants.CoralIntakeSpeed))
+    //   .onFalse(m_coralIntake.CoralIntakeCmd(0));
+
+    // m_auxController.leftStick()
+    // sets the coral intake outwards
+      // .whileTrue(m_coralIntake.CoralIntakeCmd(-1 * CoralIntakeConstants.CoralIntakeSpeed))
+      // .onFalse(m_coralIntake.CoralIntakeCmd(0));
+
+    m_auxController.rightTrigger(.5)
     // sets the coral intake inwards
       .whileTrue(m_coralIntake.CoralIntakeCmd(CoralIntakeConstants.CoralIntakeSpeed))
       .onFalse(m_coralIntake.CoralIntakeCmd(0));
 
-    m_auxController.leftStick()
+    m_auxController.leftTrigger(.5)
     // sets the coral intake outwards
       .whileTrue(m_coralIntake.CoralIntakeCmd(-1 * CoralIntakeConstants.CoralIntakeSpeed))
       .onFalse(m_coralIntake.CoralIntakeCmd(0));
-
-    m_auxController.rightTrigger(.5)
-
-    .whileTrue(m_coralIntake.CoralIntakeCmd(CoralIntakeConstants.CoralIntakeSpeed))
-    .onFalse(m_coralIntake.CoralIntakeCmd(0));
-
-    // .whileTrue(m_climb.setClimbSpeedCmd(ClimberConstants.ClimbUpSpeed));
-
-    m_auxController.leftTrigger(.5)
-
-    // .whileTrue(m_climb.setClimbSpeedCmd(-1 * ClimberConstants.ClimbDownSpeed));
-    .whileTrue(m_coralIntake.CoralIntakeCmd(-1 * CoralIntakeConstants.CoralIntakeSpeed))
-    .onFalse(m_coralIntake.CoralIntakeCmd(0));
 
   }
 

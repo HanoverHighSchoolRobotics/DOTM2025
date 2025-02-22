@@ -11,12 +11,14 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Configs;
+import frc.robot.Configs.Arm;
 import frc.robot.Constants.ArmConstants;
 
 public class ArmSubsystem extends SubsystemBase {
@@ -25,12 +27,13 @@ public class ArmSubsystem extends SubsystemBase {
 
   RelativeEncoder armEncoder;
 
-  ProfiledPIDController armPIDController = new ProfiledPIDController(
-    ArmConstants.kP, ArmConstants.kI, ArmConstants.kD,
-    new TrapezoidProfile.Constraints(ArmConstants.MaxPIDVelocity, ArmConstants.MaxPIDAcceleration));
+  PIDController pid = new PIDController(ArmConstants.kP, ArmConstants.kI, ArmConstants.kD);
 
   private double PIDgoal;
+  //stores if the motor should try to go to the goal
   private boolean goalSet;
+
+  private double desiredSpeed;
 
   public ArmSubsystem() {
     armMotor = new SparkMax(ArmConstants.ArmMotorID, MotorType.kBrushless);
@@ -43,30 +46,21 @@ public class ArmSubsystem extends SubsystemBase {
     armEncoder.setPosition(0);
 
     goalSet = false;
-
-    armPIDController.setTolerance(ArmConstants.PIDErrorAllowed);
   }
 
   @Override
   public void periodic() {
 
-    if(goalSet && !armPIDController.atSetpoint()){
-      setArmSpeed(MathUtil.clamp(armPIDController.calculate(getPosition(), PIDgoal), -.75, .75));
-    }
-    else if (goalSet)
-    {
-      armMotor.stopMotor();
-    }
-    //test to make it so when the pid gets enabled, it doesnt go to last setpoint
-    else
-    {
-      PIDgoal = getPosition();
+    if(goalSet){
+      armMotor.set(MathUtil.clamp(pid.calculate(getPosition(), PIDgoal), -1 * ArmConstants.MaxPIDSetSpeed, ArmConstants.MaxPIDSetSpeed));
     }
 
-    SmartDashboard.putNumber("Arm Encoder", getPosition());
-    SmartDashboard.putNumber("Calculated Arm Speed", armPIDController.calculate(getPosition(), PIDgoal));
+    SmartDashboard.putNumber("Desired Arm Speed", desiredSpeed);
+
+    SmartDashboard.putNumber("Arm Encoder Reading", getPosition());
+
     SmartDashboard.putNumber("Arm Goal", PIDgoal);
-    SmartDashboard.putString("Arm PID Goal", armPIDController.getGoal().toString());
+
   }
 
   // sets the arm speed so long as isnt too high or low
@@ -102,10 +96,17 @@ public class ArmSubsystem extends SubsystemBase {
     }
   }
 
-  public Command SetArmSpeedCmd(double speed){
-    return runOnce(
-      () -> setArmSpeed(speed)
-    );
+  // call using a lambda expression
+  public void setArmSpeedVoidCmd(double speed){
+    if(speed == 0){
+      goalSet = true;
+    }
+    else
+    {
+      goalSet = false;
+      setArmSpeed(speed);
+      PIDgoal = getPosition();
+    }
   }
 
   // gets the arm position in ticks
@@ -118,7 +119,6 @@ public class ArmSubsystem extends SubsystemBase {
   public void setGoal(double goal){
     if(goal <= ArmConstants.MaxArmMargin && goal >= ArmConstants.MinArmMargin){
       this.PIDgoal = goal;
-      armPIDController.setGoal(goal);
       goalSet = true;
     }
   }
@@ -129,13 +129,4 @@ public class ArmSubsystem extends SubsystemBase {
     );
   }
 
-  public void disablePID(){
-    this.goalSet = false;
-  }
-
-  public Command disablePIDCmd(){
-    return runOnce(
-      () -> disablePID()
-    );
-  }
 }
