@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AlgaeIntakeConstants;
 import frc.robot.Constants.ArmConstants;
@@ -60,8 +61,8 @@ public class RobotContainer {
   private final ClimberSubsystem m_climb = new ClimberSubsystem();
 
   // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
-  XboxController m_auxController = new XboxController(OIConstants.kAuxControllerPort);
+  CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  CommandXboxController m_auxController = new CommandXboxController(OIConstants.kAuxControllerPort);
 
   UsbCamera usbcamera1;
   UsbCamera usbcamera2;
@@ -103,10 +104,6 @@ public class RobotContainer {
                 true),
             m_robotDrive));
 
-    m_climb.setDefaultCommand( // this bit of code subtracts the triggers, negative means right pressed, positive means lefts pressed
-        m_climb.SetClimbSpeedCmd(m_driverController.getLeftTriggerAxis() - m_driverController.getRightTriggerAxis())
-    );
-
     // Build an auto chooser. This will use Commands.none() as the default option.
     configureAutoCommands();
 
@@ -128,8 +125,9 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     
-    JoystickButton aDriverButton = new JoystickButton(m_driverController, XboxController.Button.kA.value);
-    aDriverButton.toggleOnTrue(new RunCommand(
+    // JoystickButton aDriverButton = new JoystickButton(m_driverController, XboxController.Button.kA.value);
+    m_driverController.a()
+    .toggleOnTrue(new RunCommand(
       () -> m_robotDrive.drive(
           -MathUtil.applyDeadband(m_driverController.getLeftY() * OIConstants.kFASTDRIVESPEEDLIMITER, OIConstants.kDriveDeadband),
           -MathUtil.applyDeadband(m_driverController.getLeftX() * OIConstants.kFASTDRIVESPEEDLIMITER, OIConstants.kDriveDeadband),
@@ -137,8 +135,8 @@ public class RobotContainer {
           false),
       m_robotDrive));
 
-    JoystickButton bDriverButton = new JoystickButton(m_driverController, XboxController.Button.kB.value);
-    bDriverButton.toggleOnTrue(new RunCommand(
+    m_driverController.b()
+    .toggleOnTrue(new RunCommand(
       () -> m_robotDrive.drive(
           -MathUtil.applyDeadband(m_driverController.getLeftY() * OIConstants.kSLOWDRIVESPEEDLIMITER, OIConstants.kDriveDeadband),
           -MathUtil.applyDeadband(m_driverController.getLeftX() * OIConstants.kSLOWDRIVESPEEDLIMITER, OIConstants.kDriveDeadband),
@@ -146,96 +144,117 @@ public class RobotContainer {
           true),
       m_robotDrive));
 
-    JoystickButton xDriverButton = new JoystickButton(m_driverController, XboxController.Button.kX.value);
+    m_driverController.x()
     // resets gyro
-    xDriverButton.onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
+    .onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
 
-    JoystickButton yDriverButton = new JoystickButton(m_driverController, XboxController.Button.kY.value);
+    m_driverController.y()
     // gets in range (close to) the april tag
-    yDriverButton.whileTrue(new LimelightRange(m_robotDrive));
+    .whileTrue(new LimelightRange(m_robotDrive));
 
-    JoystickButton startDriverButton = new JoystickButton(m_driverController, XboxController.Button.kStart.value);
+    m_driverController.start()
     // clicks to an angle on a hexagon that you are closest to
-    startDriverButton.whileTrue(new DriveClickToAngle(m_robotDrive));
+    .whileTrue(new DriveClickToAngle(m_robotDrive));
 
-    JoystickButton backDriverButton = new JoystickButton(m_driverController, XboxController.Button.kBack.value);
+    m_driverController.back()
     // aligns horizontally with the april tag
-    backDriverButton.whileTrue(new LimelightHorizontalAlign(m_robotDrive));
+    .whileTrue(new LimelightHorizontalAlign(m_robotDrive));
 
-    JoystickButton rightBumperDriverButton = new JoystickButton(m_driverController, XboxController.Button.kRightBumper.value);
+    m_driverController.rightBumper()
     // moves right of the april tag to be in line with the coral from the center
-    rightBumperDriverButton.whileTrue(new ManualMoveHorizontalDistance(m_robotDrive, "Right", FieldConstants.coralFromCenter));
+    .whileTrue(new ManualMoveHorizontalDistance(m_robotDrive, "Right", FieldConstants.coralFromCenter));
 
-    JoystickButton leftBumperDriverButton = new JoystickButton(m_driverController, XboxController.Button.kLeftBumper.value);
+    m_driverController.leftBumper()
     // moves left of the april tag to be in line with the coral from the center
-    leftBumperDriverButton.whileTrue(new ManualMoveHorizontalDistance(m_robotDrive, "Left", FieldConstants.coralFromCenter));
+    .whileTrue(new ManualMoveHorizontalDistance(m_robotDrive, "Left", FieldConstants.coralFromCenter));
 
-    JoystickButton rightStickDriverButton = new JoystickButton(m_driverController, XboxController.Button.kRightStick.value);
+    // m_driverController.leftStick()
 
-    JoystickButton leftStickDriverButton = new JoystickButton(m_driverController, XboxController.Button.kLeftStick.value);
+    // m_driverController.rightStick()
+
+    m_driverController.rightTrigger(.5)
+
+    .whileTrue(m_climb.setClimbSpeedCmd(ClimberConstants.ClimbUpSpeed));
+
+    m_driverController.leftTrigger(.5)
+
+    .whileTrue(m_climb.setClimbSpeedCmd(-1 * ClimberConstants.ClimbDownSpeed));
     
-    JoystickButton aAuxButton = new JoystickButton(m_auxController, XboxController.Button.kA.value);
+    m_auxController.a()
     // set wrist speed positive
-      aAuxButton.whileTrue(m_wrist.SetWristSpeedCmd(WristConstants.WristSpeed))
+      .whileTrue(m_wrist.SetWristSpeedCmd(WristConstants.WristSpeed))
       .onFalse(m_wrist.SetWristSpeedCmd(0));
     // set elevator to a setpoint
       // aAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralOnePos));
 
-    JoystickButton bAuxButton = new JoystickButton(m_auxController, XboxController.Button.kB.value);
+    m_auxController.b()
     // set wrist speed negative
-      bAuxButton.whileTrue(m_wrist.SetWristSpeedCmd(-1 * WristConstants.WristSpeed))
+      .whileTrue(m_wrist.SetWristSpeedCmd(-1 * WristConstants.WristSpeed))
       .onFalse(m_wrist.SetWristSpeedCmd(0));
     //set elevator to a setpoint
       // bAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralTwoPos));
 
-    JoystickButton xAuxButton = new JoystickButton(m_auxController, XboxController.Button.kX.value);
+    m_auxController.x()
     // set elevator manual positive
-      xAuxButton.onTrue(m_elevator.SetElevatorSpeedCmd(ElevatorConstants.ElevatorSpeed))
+      .onTrue(m_elevator.SetElevatorSpeedCmd(ElevatorConstants.ElevatorSpeed))
       .onFalse(m_elevator.SetElevatorSpeedCmd(0));
     // set elevator to a setpoint
       // xAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralThreePos));
 
-    JoystickButton yAuxButton = new JoystickButton(m_auxController, XboxController.Button.kY.value);
+    m_auxController.y()
     // set elevator manual negative
-      yAuxButton.onTrue(m_elevator.SetElevatorSpeedCmd(-1 * ElevatorConstants.ElevatorSpeed))
+      .onTrue(m_elevator.SetElevatorSpeedCmd(-1 * ElevatorConstants.ElevatorSpeed))
       .onFalse(m_elevator.SetElevatorSpeedCmd(0));
     // set elevator to a setpoint
       // yAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralFourPos));
 
-    JoystickButton startAuxButton = new JoystickButton(m_auxController, XboxController.Button.kStart.value);
+    m_auxController.start()
     // set arm manual positive
-      startAuxButton.onTrue(m_arm.SetArmSpeedCmd(ArmConstants.ArmSpeed))
+      .onTrue(m_arm.SetArmSpeedCmd(ArmConstants.ArmSpeed))
       .onFalse(m_arm.SetArmSpeedCmd(0));
     // set elevator to a setpoint
       // startAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.StationPos));
 
-    JoystickButton backAuxButton = new JoystickButton(m_auxController, XboxController.Button.kBack.value);
+    m_auxController.back()
     // set arm manual negative
-      backAuxButton.whileTrue(m_arm.SetArmSpeedCmd(-1 * ArmConstants.ArmSpeed))
+      .whileTrue(m_arm.SetArmSpeedCmd(-1 * ArmConstants.ArmSpeed))
       .onFalse(m_arm.SetArmSpeedCmd(0));
     // set arm to a setpoint
       // backAuxButton.toggleOnTrue(m_arm.setGoalCmd(ArmConstants.HighPos))
       // .toggleOnFalse(m_arm.setGoalCmd(ArmConstants.LowPos));
 
-    JoystickButton rightBumperAuxButton = new JoystickButton(m_auxController, XboxController.Button.kRightBumper.value);
+    m_auxController.rightBumper()
     // sets the algae intake inwards
-      rightBumperAuxButton.whileTrue(m_algaeIntake.AlgaeIntakeCmd(AlgaeIntakeConstants.AlgaeIntakeSpeed))
+      .whileTrue(m_algaeIntake.AlgaeIntakeCmd(AlgaeIntakeConstants.AlgaeIntakeSpeed))
       .onFalse(m_algaeIntake.AlgaeIntakeCmd(0));
 
-    JoystickButton leftBumperAuxButton = new JoystickButton(m_auxController, XboxController.Button.kLeftBumper.value);
+    m_auxController.leftBumper()
     // sets the algae intake outwards
-      leftBumperAuxButton.whileTrue(m_algaeIntake.AlgaeIntakeCmd(-1 * AlgaeIntakeConstants.AlgaeIntakeSpeed))
+      .whileTrue(m_algaeIntake.AlgaeIntakeCmd(-1 * AlgaeIntakeConstants.AlgaeIntakeSpeed))
       .onFalse(m_algaeIntake.AlgaeIntakeCmd(0));
 
-    JoystickButton rightStickAuxButton = new JoystickButton(m_auxController, XboxController.Button.kRightStick.value);
+    m_auxController.rightStick()
     // sets the coral intake inwards
-      rightStickAuxButton.whileTrue(m_coralIntake.CoralIntakeCmd(CoralIntakeConstants.CoralIntakeSpeed))
+      .whileTrue(m_coralIntake.CoralIntakeCmd(CoralIntakeConstants.CoralIntakeSpeed))
       .onFalse(m_coralIntake.CoralIntakeCmd(0));
 
-    JoystickButton leftStickAuxButton = new JoystickButton(m_auxController, XboxController.Button.kLeftStick.value);
+    m_auxController.leftStick()
     // sets the coral intake outwards
-      leftStickAuxButton.whileTrue(m_coralIntake.CoralIntakeCmd(-1 * CoralIntakeConstants.CoralIntakeSpeed))
+      .whileTrue(m_coralIntake.CoralIntakeCmd(-1 * CoralIntakeConstants.CoralIntakeSpeed))
       .onFalse(m_coralIntake.CoralIntakeCmd(0));
+
+    m_auxController.rightTrigger(.5)
+
+    .whileTrue(m_coralIntake.CoralIntakeCmd(CoralIntakeConstants.CoralIntakeSpeed))
+    .onFalse(m_coralIntake.CoralIntakeCmd(0));
+
+    // .whileTrue(m_climb.setClimbSpeedCmd(ClimberConstants.ClimbUpSpeed));
+
+    m_auxController.leftTrigger(.5)
+
+    // .whileTrue(m_climb.setClimbSpeedCmd(-1 * ClimberConstants.ClimbDownSpeed));
+    .whileTrue(m_coralIntake.CoralIntakeCmd(-1 * CoralIntakeConstants.CoralIntakeSpeed))
+    .onFalse(m_coralIntake.CoralIntakeCmd(0));
 
   }
 

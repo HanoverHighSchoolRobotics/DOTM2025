@@ -76,20 +76,12 @@ public class ClimberSubsystem extends SubsystemBase {
   }
 
   // takes in the difference in trigger values, follow the math gang
-  public Command SetClimbSpeedCmd(double triggerValue){
-    if(triggerValue > .5){
-      return runOnce(
-        () -> setClimbSpeed(ClimberConstants.ClimbUpSpeed)
-      );
-    } else if(triggerValue < -.5) {
-      return runOnce(
-        () -> setClimbSpeed(-1 * ClimberConstants.ClimbDownSpeed)
-      );
-    } else {
-      return runOnce(
-        () -> setClimbSpeed(0)
-      );
-    }
+  public Command setClimbSpeedCmd(double speed){
+    return runOnce(
+      () -> {
+        setClimbSpeed(speed);
+      }
+    );
   }
 
   // gets the climb position in ticks
