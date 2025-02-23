@@ -72,13 +72,28 @@ public class RobotContainer {
   // Pathplanner Command List
   private void configureAutoCommands(){
     NamedCommands.registerCommands(Map.of(
-        "CoralIntake",Commands.parallel(
+          "CoralIntake", Commands.parallel(
                 m_coralIntake.autoCoralIntake(CoralIntakeConstants.CoralIntakeSpeed, 3)),
-        "AlgaeIntake",Commands.parallel(
-                m_algaeIntake.autoAlgaeIntake(AlgaeIntakeConstants.AlgaeIntakeSpeed, 3))
+          "CoralOuttake", Commands.parallel(
+                m_coralIntake.autoCoralIntake(-1 * CoralIntakeConstants.CoralIntakeSpeed, 3)),
+          "AlgaeIntake", Commands.parallel(
+                m_algaeIntake.autoAlgaeIntake(AlgaeIntakeConstants.AlgaeIntakeSpeed, 3)),
+          "AlgaeOuttake", Commands.parallel(
+                m_algaeIntake.autoAlgaeIntake(-1 * AlgaeIntakeConstants.AlgaeIntakeSpeed, 3)),
+          "MoveArmOut", Commands.parallel(
+                m_arm.setGoalCmd(ArmConstants.OutOfTheWayPos)),
+          "ElevatorToL4", Commands.parallel(
+                m_elevator.setGoalCmd(ElevatorConstants.CoralFourPos)),
+          "ElevatorToL3", Commands.parallel(
+                m_elevator.setGoalCmd(ElevatorConstants.CoralThreePos)),
+          "ElevatorToL2", Commands.parallel(
+                m_elevator.setGoalCmd(ElevatorConstants.CoralTwoPos)),
+          "ElevatorToStation", Commands.parallel(
+                m_elevator.setGoalCmd(ElevatorConstants.StationPos))
+            ) 
+        );
         // "ArmSetTop",Commands.parallel(
         //         m_arm.autoManualGoToGoal(0) 
-        ));
   }
 
 

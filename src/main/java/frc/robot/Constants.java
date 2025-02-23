@@ -193,9 +193,8 @@ public final class Constants {
     // command input constants
     public static final double ArmSpeed = .15;
 
-    // PID Positions - not used currently
-    public static final double LowPos = 0;
-    public static final double HighPos = 0;
+    // PID Positions
+    public static final double OutOfTheWayPos = 0;
   }
 
   public static final class WristConstants {
