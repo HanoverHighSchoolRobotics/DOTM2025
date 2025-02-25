@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import java.util.Map;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -13,7 +11,6 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -35,14 +32,13 @@ import frc.robot.commands.DriveClickToAngle;
 import frc.robot.commands.LimelightHorizontalAlign;
 import frc.robot.commands.LimelightRange;
 import frc.robot.commands.ManualMoveHorizontalDistance;
-import frc.robot.commands.ResetGyro;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
 import frc.robot.subsystems.WristSubsystem;
-import frc.robot.subsystems.ClimberSubsystem;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -71,29 +67,32 @@ public class RobotContainer {
 
   // Pathplanner Command List
   private void configureAutoCommands(){
-    NamedCommands.registerCommands(Map.of(
-          "CoralIntake", Commands.parallel(
-                m_coralIntake.autoCoralIntake(CoralIntakeConstants.CoralIntakeSpeed, 3)),
-          "CoralOuttake", Commands.parallel(
-                m_coralIntake.autoCoralIntake(-1 * CoralIntakeConstants.CoralIntakeSpeed, 3)),
-          "AlgaeIntake", Commands.parallel(
-                m_algaeIntake.autoAlgaeIntake(AlgaeIntakeConstants.AlgaeIntakeSpeed, 3)),
-          "AlgaeOuttake", Commands.parallel(
-                m_algaeIntake.autoAlgaeIntake(-1 * AlgaeIntakeConstants.AlgaeIntakeSpeed, 3)),
-          "MoveArmOut", Commands.parallel(
-                m_arm.setGoalCmd(ArmConstants.OutOfTheWayPos)),
-          "ElevatorToL4", Commands.parallel(
-                m_elevator.setGoalCmd(ElevatorConstants.CoralFourPos)),
-          "ElevatorToL3", Commands.parallel(
-                m_elevator.setGoalCmd(ElevatorConstants.CoralThreePos)),
-          "ElevatorToL2", Commands.parallel(
-                m_elevator.setGoalCmd(ElevatorConstants.CoralTwoPos)),
-          "ElevatorToStation", Commands.parallel(
-                m_elevator.setGoalCmd(ElevatorConstants.StationPos))
-            ) 
-        );
-        // "ArmSetTop",Commands.parallel(
-        //         m_arm.autoManualGoToGoal(0) 
+    NamedCommands.registerCommand("CoralIntake", Commands.parallel(
+          m_coralIntake.autoCoralIntake(CoralIntakeConstants.CoralIntakeSpeed, 3)));
+    NamedCommands.registerCommand("CoralOuttake", Commands.parallel(
+          m_coralIntake.autoCoralIntake(-1 * CoralIntakeConstants.CoralIntakeSpeed, 3)));
+    NamedCommands.registerCommand("AlgaeIntake", Commands.parallel(
+          m_algaeIntake.autoAlgaeIntake(AlgaeIntakeConstants.AlgaeIntakeSpeed, 3)));
+    NamedCommands.registerCommand("AlgaeOuttake", Commands.parallel(
+          m_algaeIntake.autoAlgaeIntake(-1 * AlgaeIntakeConstants.AlgaeIntakeSpeed, 3)));
+    NamedCommands.registerCommand("MoveArmOut", Commands.parallel(
+          m_arm.setGoalCmd(ArmConstants.OutOfTheWayPos)));
+    NamedCommands.registerCommand("ElevatorToL4", Commands.parallel(
+          m_elevator.setGoalCmd(ElevatorConstants.CoralFourPos)));
+    NamedCommands.registerCommand("ElevatorToL3", Commands.parallel(
+          m_elevator.setGoalCmd(ElevatorConstants.CoralThreePos)));
+    NamedCommands.registerCommand("ElevatorToL2", Commands.parallel(
+          m_elevator.setGoalCmd(ElevatorConstants.CoralTwoPos)));
+    NamedCommands.registerCommand("ElevatorToStation", Commands.parallel(
+          m_elevator.setGoalCmd(ElevatorConstants.StationPos)));
+    NamedCommands.registerCommand("LimelightHorizontalAlign", Commands.parallel(
+          new LimelightHorizontalAlign(m_robotDrive)));
+    NamedCommands.registerCommand("LimelightRange", Commands.parallel(
+          new LimelightRange(m_robotDrive)));
+    NamedCommands.registerCommand("MoveLeft", Commands.parallel(
+          new ManualMoveHorizontalDistance(m_robotDrive, "Left", FieldConstants.coralFromCenter)));
+    NamedCommands.registerCommand("MoveRight", Commands.parallel(
+          new ManualMoveHorizontalDistance(m_robotDrive, "Right", FieldConstants.coralFromCenter)));
   }
 
 
@@ -200,11 +199,13 @@ public class RobotContainer {
 
     m_driverController.rightTrigger(.5)
 
-    .whileTrue(m_climb.setClimbSpeedCmd(ClimberConstants.ClimbUpSpeed));
+    .whileTrue(m_climb.setClimbSpeedCmd(ClimberConstants.ClimbUpSpeed))
+    .onFalse(m_climb.setClimbSpeedCmd(0));
 
     m_driverController.leftTrigger(.5)
 
-    .whileTrue(m_climb.setClimbSpeedCmd(-1 * ClimberConstants.ClimbDownSpeed));
+    .whileTrue(m_climb.setClimbSpeedCmd(-1 * ClimberConstants.ClimbDownSpeed))
+    .onFalse(m_climb.setClimbSpeedCmd(0));
     
     // m_auxController.a()
     // set wrist speed positive

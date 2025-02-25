@@ -69,7 +69,7 @@ public final class Constants {
 
     public static final double MaxMoveInRangeSpeed = .2;
 
-    public static final double SlowRotSpeed = .1;
+    public static final double SlowRotSpeed = .2;
   }
 
   public static final class ModuleConstants {
@@ -168,7 +168,7 @@ public final class Constants {
     public static final boolean AlgaeIntakeMotorInverted = false;
 
     // command input constants
-    public static final double AlgaeIntakeSpeed = .15;
+    public static final double AlgaeIntakeSpeed = .7;
   }
 
   public static final class ArmConstants {
@@ -227,6 +227,8 @@ public final class Constants {
 
     public static final double HORkP = .01;
     public static final double MaxAlignSpeed = .2;
+
+    public static final double CloseEnoughArea = 4.15;
   }
 
   public static final class FieldConstants {

@@ -107,6 +107,13 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
   }
 
+  // only use for testing or resetting the robot position
+  public Command setElevatorSpeedNoLimitsCmd(double speed){
+    return run(
+      () -> leftElevatorMotor.set(speed)
+    );
+  }
+
   public Command SetElevatorSpeedCmd(double speed){
     return runOnce(
       () -> setElevatorSpeed(speed)

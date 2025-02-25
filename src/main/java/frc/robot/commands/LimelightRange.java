@@ -38,7 +38,7 @@ public class LimelightRange extends Command {
   public void execute() {
     double area = LimelightHelpers.getTA("");
     // double rotSpeed = LimelightConstants.ROTkP * LimelightHelpers.getTX("limelight") * -1 * DriveConstants.kMaxAngularSpeed;
-    if(area < 4.15 && area != 0){
+    if(area < LimelightConstants.CloseEnoughArea && area != 0){
       if(LimelightConstants.RANGEkP * (4.45 - area) * DriveConstants.MaxMoveInRangeSpeed >= DriveConstants.MaxMoveInRangeSpeed){
         double xSpeed = DriveConstants.MaxMoveInRangeSpeed;
         m_drive.drive(xSpeed, 0, 0, false);
