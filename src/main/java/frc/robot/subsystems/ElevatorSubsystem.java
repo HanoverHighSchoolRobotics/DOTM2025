@@ -70,8 +70,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Elevator Encoder Reading", getPosition());
     SmartDashboard.putNumber("Calculated Elevator Speed",elevatorPIDController.calculate(getPosition(), PIDgoal));
-    SmartDashboard.putNumber("ELevator Goal", PIDgoal);
-    SmartDashboard.putString("Elevator PID Goal", elevatorPIDController.getGoal().toString());
+    SmartDashboard.putNumber("Elevator Goal", PIDgoal);
   }
 
   // sets the elevator speed so long as isnt too high or low

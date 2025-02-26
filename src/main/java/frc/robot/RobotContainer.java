@@ -9,6 +9,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.HttpCamera;
+import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
@@ -62,6 +64,7 @@ public class RobotContainer {
 
   UsbCamera usbcamera1;
   UsbCamera usbcamera2;
+  // HttpCamera limelightFeed;
 
   private final SendableChooser<Command> autoChooser;
 
@@ -105,6 +108,8 @@ public class RobotContainer {
 
     usbcamera1 = CameraServer.startAutomaticCapture(0);
     usbcamera2 = CameraServer.startAutomaticCapture(1);
+    // limelightFeed = new HttpCamera("limelight", "http://limelight.local:5801/", HttpCameraKind.kMJPGStreamer);
+    // CameraServer.startAutomaticCapture(limelightFeed);
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -120,12 +125,12 @@ public class RobotContainer {
 
     m_arm.setDefaultCommand(
       new RunCommand(
-        () -> m_arm.setArmSpeedVoidCmd(MathUtil.applyDeadband(m_driverController.getLeftY() * ArmConstants.ArmSpeed, OIConstants.kAuxDeadband)), 
+        () -> m_arm.setArmSpeedVoidCmd(MathUtil.applyDeadband(m_auxController.getLeftY() * ArmConstants.ArmSpeed * -1, OIConstants.kAuxDeadband)), 
         m_arm));
 
     m_wrist.setDefaultCommand(
       new RunCommand(
-        () -> m_wrist.setWristSpeedVoidCmd(MathUtil.applyDeadband(m_driverController.getRightY() * WristConstants.WristSpeed, OIConstants.kAuxDeadband)), 
+        () -> m_wrist.setWristSpeedVoidCmd(MathUtil.applyDeadband(m_auxController.getRightY() * WristConstants.WristSpeed * -1, OIConstants.kAuxDeadband)), 
         m_wrist));
 
     // Build an auto chooser. This will use Commands.none() as the default option.
@@ -135,6 +140,9 @@ public class RobotContainer {
 
     autoChooser.addOption("Test Auto (Example Auto)", new PathPlannerAuto("Example Auto"));
     autoChooser.addOption("Auto 6 In Dashboard", new PathPlannerAuto("Auto6"));
+    autoChooser.addOption("Auto555 display", new PathPlannerAuto("test555"));
+    autoChooser.addOption("2coral", new PathPlannerAuto("2CoralAuto1"));
+    autoChooser.addOption("MoveArmOut", new PathPlannerAuto("MoveArmOutAuto1"));
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
@@ -220,6 +228,7 @@ public class RobotContainer {
       // .onFalse(m_wrist.SetWristSpeedCmd(0));
     //set elevator to a setpoint
       // bAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralTwoPos));
+    
 
     m_auxController.x()
     // set elevator manual positive
@@ -242,13 +251,12 @@ public class RobotContainer {
     // set elevator to a setpoint
       // startAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.StationPos));
 
-    // m_auxController.back()
+    m_auxController.back()
     // set arm manual negative
-      // .whileTrue(m_arm.SetArmSpeedCmd(-1 * ArmConstants.ArmSpeed))
-      // .onFalse(m_arm.SetArmSpeedCmd(0));
+    //   .whileTrue(m_arm.SetArmSpeedCmd(-1 * ArmConstants.ArmSpeed))
+    //   .onFalse(m_arm.SetArmSpeedCmd(0));
     // set arm to a setpoint
-      // backAuxButton.toggleOnTrue(m_arm.setGoalCmd(ArmConstants.HighPos))
-      // .toggleOnFalse(m_arm.setGoalCmd(ArmConstants.LowPos));
+      .onTrue(m_arm.setGoalCmd(ArmConstants.OutOfTheWayPos));
 
     m_auxController.rightBumper()
     // sets the algae intake inwards

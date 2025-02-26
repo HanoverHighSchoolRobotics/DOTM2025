@@ -123,10 +123,10 @@ public final class Constants {
 
   public static final class ElevatorConstants {
     // subsystem constants
-    public static final int LeftMotorID = 9;
-    public static final int RightMotorID = 10;
+    public static final int LeftMotorID = 13;
+    public static final int RightMotorID = 12;
 
-    public static final boolean LeftMotorInverted = true;
+    public static final boolean LeftMotorInverted = false;
     public static final boolean RightMotorInvertedFromLeft = true;
 
     public static final double MaxElevatorMargin = 1000000;
@@ -153,28 +153,28 @@ public final class Constants {
   }
   public static final class CoralIntakeConstants {
     // subsystem constants
-    public static final int IntakeMotorID = 11;
+    public static final int IntakeMotorID = 15;
 
     public static final boolean CoralIntakeMotorInverted = false; 
 
     // command input constants
-    public static final double CoralIntakeSpeed = .15;
+    public static final double CoralIntakeSpeed = .30;
   }
 
   public static final class AlgaeIntakeConstants {
     // subsystem constants
-    public static final int IntakeMotorID = 12;
+    public static final int IntakeMotorID = 14;
 
     public static final boolean AlgaeIntakeMotorInverted = false;
 
     // command input constants
-    public static final double AlgaeIntakeSpeed = .7;
+    public static final double AlgaeIntakeSpeed = .15;
   }
 
   public static final class ArmConstants {
     // subsystem constants
-    public static final int ArmMotorID = 14;
-    public static final boolean ArmMotorInverted = false;
+    public static final int ArmMotorID = 11;
+    public static final boolean ArmMotorInverted = true;
 
     public static final double MaxArmMargin = 500;
     public static final double MinArmMargin = -500;
@@ -183,7 +183,7 @@ public final class Constants {
     public static final double kI = 0;
     public static final double kD = 0;
 
-    public static final double MaxPIDSetSpeed = .4;
+    public static final double MaxPIDSetSpeed = .15;
 
     public static final double MaxPIDVelocity = 20;
     public static final double MaxPIDAcceleration = 10;
@@ -194,12 +194,12 @@ public final class Constants {
     public static final double ArmSpeed = .15;
 
     // PID Positions
-    public static final double OutOfTheWayPos = 0;
+    public static final double OutOfTheWayPos = 20;
   }
 
   public static final class WristConstants {
     // subsystem constants
-    public static final int WristMotorID = 13; 
+    public static final int WristMotorID = 9; 
     public static final boolean WristInverted = false; 
 
     public static final double MaxWristMargin = 1000;
@@ -240,7 +240,7 @@ public final class Constants {
 
   public static final class ClimberConstants {
     // subsystem constants
-    public static final int ClimberMotorID = 0;
+    public static final int ClimberMotorID = 10;
     public static final boolean ClimberInverted = false;
     public static final double MaxClimbMargin = 100000;
     public static final double MinClimbMargin = -100000;
