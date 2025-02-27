@@ -70,6 +70,7 @@ public final class Constants {
     public static final double MaxMoveInRangeSpeed = .2;
 
     public static final double SlowRotSpeed = .2;
+    public static final double VerticalAlignmentSpeed = .2;
   }
 
   public static final class ModuleConstants {
@@ -95,7 +96,7 @@ public final class Constants {
     public static final int kAuxControllerPort = 1;
     public static final double kAuxDeadband = 0.05;
 
-    public static final double kFASTDRIVESPEEDLIMITER = .4;
+    public static final double kFASTDRIVESPEEDLIMITER = .6;
     public static final double kFASTROTSPEEDLIMITER = .4;
 
     public static final double kSLOWDRIVESPEEDLIMITER = .2;
@@ -132,24 +133,25 @@ public final class Constants {
     public static final double MaxElevatorMargin = 1000000;
     public static final double MinElevatorMargin = -1000000;
 
-    public static final double kP = .005;
+    public static final double kP = .3;
     public static final double kI = 0;
     public static final double kD = 0;
 
-    public static final double MaxPIDVelocity = .3;
-    public static final double MaxPIDAcceleration = .1;
+    public static final double MaxPIDVelocity = 10;
+    public static final double MaxPIDAcceleration = 2;
 
-    public static final double PIDErrorAllowed = .1;
+    public static final double PIDErrorAllowed = .05;
 
     // command input constants
-    public static final double ElevatorSpeed = .15;
+    public static final double ElevatorUpSpeed = .4;
+    public static final double ElevatorDownSpeed = .3;
 
     // PID Positions
-    public static final double CoralOnePos = 0;
+    // public static final double CoralOnePos = 0;
     public static final double CoralTwoPos = 0;
-    public static final double CoralThreePos = 0;
-    public static final double CoralFourPos = 0;
-    public static final double StationPos = 0;
+    public static final double CoralThreePos = 52;
+    public static final double CoralFourPos = 138;
+    public static final double StationPos = 7.86;
   }
   public static final class CoralIntakeConstants {
     // subsystem constants
@@ -158,7 +160,8 @@ public final class Constants {
     public static final boolean CoralIntakeMotorInverted = false; 
 
     // command input constants
-    public static final double CoralIntakeSpeed = .30;
+    public static final double CoralIntakeSpeed = .5;
+    public static final double CoralOuttakeSpeed = .2;
   }
 
   public static final class AlgaeIntakeConstants {
@@ -168,7 +171,7 @@ public final class Constants {
     public static final boolean AlgaeIntakeMotorInverted = false;
 
     // command input constants
-    public static final double AlgaeIntakeSpeed = .15;
+    public static final double AlgaeIntakeSpeed = .3;
   }
 
   public static final class ArmConstants {
@@ -194,7 +197,7 @@ public final class Constants {
     public static final double ArmSpeed = .15;
 
     // PID Positions
-    public static final double OutOfTheWayPos = 20;
+    public static final double OutOfTheWayPos = 30;
   }
 
   public static final class WristConstants {
@@ -236,6 +239,8 @@ public final class Constants {
     public static final double coralFromCenter = coralToCoralLength / 2;
 
     public static final double fieldWidth = 8.025;
+
+    public static final double limelightRangeStopToCoralStation = .6604;
   }
 
   public static final class ClimberConstants {

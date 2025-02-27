@@ -8,10 +8,6 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.HttpCamera;
-import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -34,6 +30,7 @@ import frc.robot.commands.DriveClickToAngle;
 import frc.robot.commands.LimelightHorizontalAlign;
 import frc.robot.commands.LimelightRange;
 import frc.robot.commands.ManualMoveHorizontalDistance;
+import frc.robot.commands.ManualMoveVerticalDistance;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClimberSubsystem;
@@ -62,22 +59,18 @@ public class RobotContainer {
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_auxController = new CommandXboxController(OIConstants.kAuxControllerPort);
 
-  UsbCamera usbcamera1;
-  UsbCamera usbcamera2;
-  // HttpCamera limelightFeed;
-
   private final SendableChooser<Command> autoChooser;
 
   // Pathplanner Command List
   private void configureAutoCommands(){
     NamedCommands.registerCommand("CoralIntake", Commands.parallel(
-          m_coralIntake.autoCoralIntake(CoralIntakeConstants.CoralIntakeSpeed, 3)));
-    NamedCommands.registerCommand("CoralOuttake", Commands.parallel(
           m_coralIntake.autoCoralIntake(-1 * CoralIntakeConstants.CoralIntakeSpeed, 3)));
+    NamedCommands.registerCommand("CoralOuttake", Commands.parallel(
+          m_coralIntake.autoCoralIntake(1 * CoralIntakeConstants.CoralIntakeSpeed, 3)));
     NamedCommands.registerCommand("AlgaeIntake", Commands.parallel(
-          m_algaeIntake.autoAlgaeIntake(AlgaeIntakeConstants.AlgaeIntakeSpeed, 3)));
-    NamedCommands.registerCommand("AlgaeOuttake", Commands.parallel(
           m_algaeIntake.autoAlgaeIntake(-1 * AlgaeIntakeConstants.AlgaeIntakeSpeed, 3)));
+    NamedCommands.registerCommand("AlgaeOuttake", Commands.parallel(
+          m_algaeIntake.autoAlgaeIntake(1 * AlgaeIntakeConstants.AlgaeIntakeSpeed, 3)));
     NamedCommands.registerCommand("MoveArmOut", Commands.parallel(
           m_arm.setGoalCmd(ArmConstants.OutOfTheWayPos)));
     NamedCommands.registerCommand("ElevatorToL4", Commands.parallel(
@@ -106,10 +99,6 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    usbcamera1 = CameraServer.startAutomaticCapture(0);
-    usbcamera2 = CameraServer.startAutomaticCapture(1);
-    // limelightFeed = new HttpCamera("limelight", "http://limelight.local:5801/", HttpCameraKind.kMJPGStreamer);
-    // CameraServer.startAutomaticCapture(limelightFeed);
 
     // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -143,6 +132,10 @@ public class RobotContainer {
     autoChooser.addOption("Auto555 display", new PathPlannerAuto("test555"));
     autoChooser.addOption("2coral", new PathPlannerAuto("2CoralAuto1"));
     autoChooser.addOption("MoveArmOut", new PathPlannerAuto("MoveArmOutAuto1"));
+    autoChooser.addOption("1 O Clock Auto", new PathPlannerAuto("1OClockAuto"));
+    autoChooser.addOption("Move Out", new PathPlannerAuto("MoveOutPath"));
+    autoChooser.addOption("Work Please", new PathPlannerAuto("1CoralAutoWorkHope"));
+
 
     SmartDashboard.putData("Auto Chooser", autoChooser);
   }
@@ -160,13 +153,7 @@ public class RobotContainer {
     
     // JoystickButton aDriverButton = new JoystickButton(m_driverController, XboxController.Button.kA.value);
     m_driverController.a()
-    .toggleOnTrue(new RunCommand(
-      () -> m_robotDrive.drive(
-          -MathUtil.applyDeadband(m_driverController.getLeftY() * OIConstants.kFASTDRIVESPEEDLIMITER, OIConstants.kDriveDeadband),
-          -MathUtil.applyDeadband(m_driverController.getLeftX() * OIConstants.kFASTDRIVESPEEDLIMITER, OIConstants.kDriveDeadband),
-          -MathUtil.applyDeadband(m_driverController.getRightX() * OIConstants.kFASTROTSPEEDLIMITER, OIConstants.kDriveDeadband),
-          false),
-      m_robotDrive));
+    .whileTrue(new ManualMoveVerticalDistance(m_robotDrive, "Up", FieldConstants.limelightRangeStopToCoralStation));
 
     m_driverController.b()
     .toggleOnTrue(new RunCommand(
@@ -215,32 +202,39 @@ public class RobotContainer {
     .whileTrue(m_climb.setClimbSpeedCmd(-1 * ClimberConstants.ClimbDownSpeed))
     .onFalse(m_climb.setClimbSpeedCmd(0));
     
-    // m_auxController.a()
+    m_auxController.a()
     // set wrist speed positive
       // .whileTrue(m_wrist.SetWristSpeedCmd(WristConstants.WristSpeed))
       // .onFalse(m_wrist.SetWristSpeedCmd(0));
     // set elevator to a setpoint
       // aAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralOnePos));
 
-    // m_auxController.b()
+    .onTrue(m_elevator.setGoalCmd(ElevatorConstants.StationPos));
+
+    m_auxController.b()
     // set wrist speed negative
       // .whileTrue(m_wrist.SetWristSpeedCmd(-1 * WristConstants.WristSpeed))
       // .onFalse(m_wrist.SetWristSpeedCmd(0));
     //set elevator to a setpoint
       // bAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralTwoPos));
     
-
+    .onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralTwoPos));
+    
+ 
     m_auxController.x()
     // set elevator manual positive
-      .whileTrue(m_elevator.SetElevatorSpeedCmd(ElevatorConstants.ElevatorSpeed))
-      .onFalse(m_elevator.SetElevatorSpeedCmd(0));
+      // .whileTrue(m_elevator.SetElevatorSpeedCmd(ElevatorConstants.ElevatorUpSpeed))
+      // .onFalse(m_elevator.SetElevatorSpeedCmd(0));
+      .onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralThreePos));
+
     // set elevator to a setpoint
       // xAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralThreePos));
 
     m_auxController.y()
     // set elevator manual negative
-      .onTrue(m_elevator.SetElevatorSpeedCmd(-1 * ElevatorConstants.ElevatorSpeed))
-      .onFalse(m_elevator.SetElevatorSpeedCmd(0));
+      // .onTrue(m_elevator.SetElevatorSpeedCmd(-1 * ElevatorConstants.ElevatorDownSpeed))
+      // .onFalse(m_elevator.SetElevatorSpeedCmd(0));
+      .onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralFourPos));
     // set elevator to a setpoint
       // yAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralFourPos));
 
@@ -260,8 +254,10 @@ public class RobotContainer {
 
     m_auxController.rightBumper()
     // sets the algae intake inwards
-      .whileTrue(m_algaeIntake.AlgaeIntakeCmd(AlgaeIntakeConstants.AlgaeIntakeSpeed))
-      .onFalse(m_algaeIntake.AlgaeIntakeCmd(0));
+      // .whileTrue(m_algaeIntake.AlgaeIntakeCmd(AlgaeIntakeConstants.AlgaeIntakeSpeed))
+      // .onFalse(m_algaeIntake.AlgaeIntakeCmd(0));
+      .whileTrue(m_coralIntake.CoralIntakeCmd(-1 * CoralIntakeConstants.CoralIntakeSpeed))
+      .onFalse(m_coralIntake.CoralIntakeCmd(0));
 
     m_auxController.leftBumper()
     // sets the algae intake outwards
@@ -280,13 +276,13 @@ public class RobotContainer {
 
     m_auxController.rightTrigger(.5)
     // sets the coral intake inwards
-      .whileTrue(m_coralIntake.CoralIntakeCmd(CoralIntakeConstants.CoralIntakeSpeed))
+      .whileTrue(m_coralIntake.CoralIntakeCmd(1 * CoralIntakeConstants.CoralOuttakeSpeed))
       .onFalse(m_coralIntake.CoralIntakeCmd(0));
 
     m_auxController.leftTrigger(.5)
-    // sets the coral intake outwards
-      .whileTrue(m_coralIntake.CoralIntakeCmd(-1 * CoralIntakeConstants.CoralIntakeSpeed))
-      .onFalse(m_coralIntake.CoralIntakeCmd(0));
+    // sets the algae intake outwards
+      .whileTrue(m_algaeIntake.AlgaeIntakeCmd(1 * AlgaeIntakeConstants.AlgaeIntakeSpeed))
+      .onFalse(m_algaeIntake.AlgaeIntakeCmd(0));
 
   }
 

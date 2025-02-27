@@ -55,8 +55,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
 
-    if(goalSet && elevatorPIDController.atSetpoint()){
-      setElevatorSpeed(MathUtil.clamp(elevatorPIDController.calculate(getPosition(), PIDgoal), -.75, .75));
+    if(goalSet && !elevatorPIDController.atSetpoint()){
+      setElevatorSpeed(MathUtil.clamp(elevatorPIDController.calculate(getPosition(), PIDgoal), -.85, .85));
     }
     else if (goalSet)
     {
@@ -70,6 +70,7 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Elevator Encoder Reading", getPosition());
     SmartDashboard.putNumber("Calculated Elevator Speed",elevatorPIDController.calculate(getPosition(), PIDgoal));
+    SmartDashboard.putNumber("Displayed Elevator Speed", MathUtil.clamp(elevatorPIDController.calculate(getPosition(), PIDgoal), -.75, .75));
     SmartDashboard.putNumber("Elevator Goal", PIDgoal);
   }
 

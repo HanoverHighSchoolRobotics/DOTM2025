@@ -11,6 +11,12 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.HttpCamera;
+import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+
 // import org.littletonrobotics.urcl.URCL;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,6 +32,9 @@ public class Robot extends LoggedRobot {
 
   private final RobotContainer m_robotContainer;
 
+  UsbCamera camera1;
+  // HttpCamera limelightFeed;
+
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -34,6 +43,17 @@ public class Robot extends LoggedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
+    // camera1 = CameraServer.startAutomaticCapture(0);
+    // limelightFeed = new HttpCamera("limelight", "http://10.15.22.11:5800/", HttpCameraKind.kMJPGStreamer);
+    // CameraServer.startAutomaticCapture(limelightFeed);
+
+    camera1 = CameraServer.startAutomaticCapture(0);
+
+    Shuffleboard.getTab("LiveWindow")
+    .addCamera("Limelight Stream", "test", "http://10.15.22.11:5800")
+    .withPosition(2, 0)
+    .withSize(3, 3);
+
   }
 
   public void robotInit(){

@@ -4,24 +4,24 @@
     {
       "anchor": {
         "x": 3.6802254098360656,
-        "y": 3.0719774590163933
+        "y": 3.000051229508196
       },
       "prevControl": null,
       "nextControl": {
         "x": 2.8177499999999998,
-        "y": 2.4065
+        "y": 2.3345737704918026
       },
       "isLocked": false,
       "linkedName": "8OClock"
     },
     {
       "anchor": {
-        "x": 1.0908811475409836,
-        "y": 7.123821721311475
+        "x": 1.1388319672131146,
+        "y": 7.01593237704918
       },
       "prevControl": {
-        "x": 1.9987500000000002,
-        "y": 6.131
+        "x": 2.0467008196721315,
+        "y": 6.023110655737705
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 51.51980175165703
+    "rotation": 58.240519915187186
   },
   "useDefaultConstraints": true
 }

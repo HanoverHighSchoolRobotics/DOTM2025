@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.0908811475409836,
-        "y": 7.123821721311475
+        "x": 1.1388319672131146,
+        "y": 7.01593237704918
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0366311475409837,
-        "y": 6.772821721311475
+        "x": 2.084581967213115,
+        "y": 6.66493237704918
       },
       "isLocked": false,
       "linkedName": "HumanPlayerStationLeft"
