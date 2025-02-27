@@ -127,14 +127,17 @@ public class RobotContainer {
 
     autoChooser = AutoBuilder.buildAutoChooser();
 
-    autoChooser.addOption("Test Auto (Example Auto)", new PathPlannerAuto("Example Auto"));
-    autoChooser.addOption("Auto 6 In Dashboard", new PathPlannerAuto("Auto6"));
-    autoChooser.addOption("Auto555 display", new PathPlannerAuto("test555"));
-    autoChooser.addOption("2coral", new PathPlannerAuto("2CoralAuto1"));
-    autoChooser.addOption("MoveArmOut", new PathPlannerAuto("MoveArmOutAuto1"));
-    autoChooser.addOption("1 O Clock Auto", new PathPlannerAuto("1OClockAuto"));
-    autoChooser.addOption("Move Out", new PathPlannerAuto("MoveOutPath"));
-    autoChooser.addOption("Work Please", new PathPlannerAuto("1CoralAutoWorkHope"));
+    // autoChooser.addOption("Test Auto (Example Auto)", new PathPlannerAuto("Example Auto"));
+    // autoChooser.addOption("Auto 6 In Dashboard", new PathPlannerAuto("Auto6"));
+    // autoChooser.addOption("Auto555 display", new PathPlannerAuto("test555"));
+    // autoChooser.addOption("2coral", new PathPlannerAuto("2CoralAuto1"));
+    // autoChooser.addOption("MoveArmOut", new PathPlannerAuto("MoveArmOutAuto1"));
+    autoChooser.addOption("CLICK! 1 OClock Auto", new PathPlannerAuto("1OClockAuto"));
+    autoChooser.addOption("CLICK! 12 OClock Auto", new PathPlannerAuto("12OClockAuto"));
+    autoChooser.addOption("CLICK! 10 OClock Auto", new PathPlannerAuto("10OClockAuto"));
+    autoChooser.addOption("CLICK! 8 OClock Auto", new PathPlannerAuto("8OClockAuto"));
+    autoChooser.addOption("CLICK! Move Out Auto", new PathPlannerAuto("MoveOutAuto"));
+    // autoChooser.addOption("Work Please", new PathPlannerAuto("1CoralAutoWorkHope"));
 
 
     SmartDashboard.putData("Auto Chooser", autoChooser);

@@ -130,10 +130,10 @@ public final class Constants {
     public static final boolean LeftMotorInverted = false;
     public static final boolean RightMotorInvertedFromLeft = true;
 
-    public static final double MaxElevatorMargin = 1000000;
-    public static final double MinElevatorMargin = -1000000;
+    public static final double MaxElevatorMargin = 145;
+    public static final double MinElevatorMargin = -5;
 
-    public static final double kP = .3;
+    public static final double kP = .3; //touch this and stuff may start oscillating (dont increase w/o my permission)
     public static final double kI = 0;
     public static final double kD = 0;
 
@@ -179,8 +179,8 @@ public final class Constants {
     public static final int ArmMotorID = 11;
     public static final boolean ArmMotorInverted = true;
 
-    public static final double MaxArmMargin = 500;
-    public static final double MinArmMargin = -500;
+    public static final double MaxArmMargin = 50000;
+    public static final double MinArmMargin = -50000;
 
     public static final double kP = .05;
     public static final double kI = 0;

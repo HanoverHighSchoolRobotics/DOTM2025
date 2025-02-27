@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.6855,
-        "y": 2.962249999999999
+        "x": 7.1566598360655735,
+        "y": 6.176793032786884
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.4987172131147544,
-        "y": 2.0152213114754094
+        "x": 5.214651639344262,
+        "y": 6.572387295081967
       },
       "isLocked": false,
-      "linkedName": "8OClock"
+      "linkedName": "MiddleCage"
     },
     {
       "anchor": {
-        "x": 1.048766447368421,
-        "y": 1.0326480263157896
+        "x": 3.9585000000000004,
+        "y": 5.234
       },
       "prevControl": {
-        "x": 2.3735655737704917,
-        "y": 1.6094774590163934
+        "x": 4.519364754098361,
+        "y": 5.745235655737704
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "HumanPlayerStationRight"
+      "linkedName": "12OClock"
     }
   ],
   "rotationTargets": [],
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -125.63980919808661
+    "rotation": -59.237280465761074
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 58.240519915187186
+    "rotation": 179.63622216113544
   },
   "useDefaultConstraints": true
 }
