@@ -156,7 +156,8 @@ public class RobotContainer {
     
     // JoystickButton aDriverButton = new JoystickButton(m_driverController, XboxController.Button.kA.value);
     m_driverController.a()
-    .whileTrue(new ManualMoveVerticalDistance(m_robotDrive, "Up", FieldConstants.limelightRangeStopToCoralStation));
+//    .whileTrue(new ManualMoveVerticalDistance(m_robotDrive, "Up", FieldConstants.limelightRangeStopToCoralStation));
+    .whileTrue(new ManualMoveVerticalDistance(m_robotDrive, "Down", FieldConstants.limelightRangeStopToCoralStation));
 
     m_driverController.b()
     .toggleOnTrue(new RunCommand(

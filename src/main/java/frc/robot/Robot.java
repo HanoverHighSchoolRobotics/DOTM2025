@@ -12,10 +12,13 @@ import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.CvSink;
+import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 // import org.littletonrobotics.urcl.URCL;
 
@@ -47,13 +50,17 @@ public class Robot extends LoggedRobot {
     // limelightFeed = new HttpCamera("limelight", "http://10.15.22.11:5800/", HttpCameraKind.kMJPGStreamer);
     // CameraServer.startAutomaticCapture(limelightFeed);
 
-    camera1 = CameraServer.startAutomaticCapture(0);
+    
 
-    Shuffleboard.getTab("LiveWindow")
-    .addCamera("Limelight Stream", "test", "http://10.15.22.11:5800")
-    .withPosition(2, 0)
-    .withSize(3, 3);
-
+    // ShuffleboardTab cameraTab = Shuffleboard.getTab("CameraTab");
+    // HttpCamera limeLightFeed = new HttpCamera("limelight", "http://limelight.local:5800/stream.mjpg");
+    // // cameraTab.add("CameraFeed", limeLightFeed).withPosition(0, 0).withSize(15, 8);
+    // CameraServer.startAutomaticCapture(limeLightFeed);
+    // limeLightFeed.setResolution(640, 480);
+    // // CvSink cvSink = CameraServer.getVideo();
+    // CvSource outputStream = CameraServer.putVideo("Rectangle", 640, 480);
+    // cameraTab.add("CameraFeed", outputStream).withPosition(0, 0).withSize(15, 8);
+    
   }
 
   public void robotInit(){

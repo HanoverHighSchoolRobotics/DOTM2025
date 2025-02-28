@@ -149,9 +149,9 @@ public final class Constants {
     // PID Positions
     // public static final double CoralOnePos = 0;
     public static final double CoralTwoPos = 0;
-    public static final double CoralThreePos = 52;
-    public static final double CoralFourPos = 138;
-    public static final double StationPos = 7.86;
+    public static final double CoralThreePos = 48;
+    public static final double CoralFourPos = 132;
+    public static final double StationPos = 9.1;
   }
   public static final class CoralIntakeConstants {
     // subsystem constants
@@ -160,8 +160,8 @@ public final class Constants {
     public static final boolean CoralIntakeMotorInverted = false; 
 
     // command input constants
-    public static final double CoralIntakeSpeed = .5;
-    public static final double CoralOuttakeSpeed = .2;
+    public static final double CoralIntakeSpeed = .45;
+    public static final double CoralOuttakeSpeed = .3;
   }
 
   public static final class AlgaeIntakeConstants {
@@ -194,7 +194,7 @@ public final class Constants {
     public static final double PIDErrorAllowed = .2;
 
     // command input constants
-    public static final double ArmSpeed = .15;
+    public static final double ArmSpeed = .4;
 
     // PID Positions
     public static final double OutOfTheWayPos = 30;
@@ -219,7 +219,7 @@ public final class Constants {
 
     public static final double PIDErrorAllowed = .1;
     // command input constants
-    public static final double WristSpeed = .15;
+    public static final double WristSpeed = .25;
 
     
   }
@@ -240,7 +240,7 @@ public final class Constants {
 
     public static final double fieldWidth = 8.025;
 
-    public static final double limelightRangeStopToCoralStation = .6604;
+    public static final double limelightRangeStopToCoralStation = .064;
   }
 
   public static final class ClimberConstants {
@@ -249,8 +249,8 @@ public final class Constants {
     public static final boolean ClimberInverted = false;
     public static final double MaxClimbMargin = 100000;
     public static final double MinClimbMargin = -100000;
-    public static final double ClimbUpSpeed = .15;
-    public static final double ClimbDownSpeed = .15;
+    public static final double ClimbUpSpeed = .35;
+    public static final double ClimbDownSpeed = .1;
   }
 
 }
