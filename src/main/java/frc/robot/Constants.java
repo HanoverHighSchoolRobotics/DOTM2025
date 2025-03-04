@@ -96,8 +96,8 @@ public final class Constants {
     public static final int kAuxControllerPort = 1;
     public static final double kAuxDeadband = 0.05;
 
-    public static final double kFASTDRIVESPEEDLIMITER = .6;
-    public static final double kFASTROTSPEEDLIMITER = .4;
+    public static final double kFASTDRIVESPEEDLIMITER = .85;
+    public static final double kFASTROTSPEEDLIMITER = .7;
 
     public static final double kSLOWDRIVESPEEDLIMITER = .2;
     public static final double kSLOWROTSPEEDLIMITER = .2;
@@ -133,7 +133,7 @@ public final class Constants {
     public static final double MaxElevatorMargin = 145;
     public static final double MinElevatorMargin = -5;
 
-    public static final double kP = .3; //touch this and stuff may start oscillating (dont increase w/o my permission)
+    public static final double kP = .3; //  OG was 3; touch this and stuff may start oscillating (dont increase w/o my permission)
     public static final double kI = 0;
     public static final double kD = 0;
 
@@ -143,15 +143,15 @@ public final class Constants {
     public static final double PIDErrorAllowed = .05;
 
     // command input constants
-    public static final double ElevatorUpSpeed = .4;
-    public static final double ElevatorDownSpeed = .3;
+    public static final double ElevatorUpSpeed = .7;
+    public static final double ElevatorDownSpeed = .4;
 
     // PID Positions
     // public static final double CoralOnePos = 0;
     public static final double CoralTwoPos = 0;
     public static final double CoralThreePos = 48;
-    public static final double CoralFourPos = 132;
-    public static final double StationPos = 9.1;
+    public static final double CoralFourPos = 123; //132
+    public static final double StationPos = 9.3;
   }
   public static final class CoralIntakeConstants {
     // subsystem constants
@@ -171,7 +171,7 @@ public final class Constants {
     public static final boolean AlgaeIntakeMotorInverted = false;
 
     // command input constants
-    public static final double AlgaeIntakeSpeed = .3;
+    public static final double AlgaeIntakeSpeed = .35;
   }
 
   public static final class ArmConstants {
@@ -194,7 +194,7 @@ public final class Constants {
     public static final double PIDErrorAllowed = .2;
 
     // command input constants
-    public static final double ArmSpeed = .4;
+    public static final double ArmSpeed = .5;
 
     // PID Positions
     public static final double OutOfTheWayPos = 30;
@@ -219,7 +219,7 @@ public final class Constants {
 
     public static final double PIDErrorAllowed = .1;
     // command input constants
-    public static final double WristSpeed = .25;
+    public static final double WristSpeed = .35;
 
     
   }
@@ -249,8 +249,8 @@ public final class Constants {
     public static final boolean ClimberInverted = false;
     public static final double MaxClimbMargin = 100000;
     public static final double MinClimbMargin = -100000;
-    public static final double ClimbUpSpeed = .35;
-    public static final double ClimbDownSpeed = .1;
+    public static final double ClimbUpSpeed = .6;
+    public static final double ClimbDownSpeed = .4;
   }
 
 }

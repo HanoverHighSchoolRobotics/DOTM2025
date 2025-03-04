@@ -164,7 +164,7 @@ public class RobotContainer {
       () -> m_robotDrive.drive(
           -MathUtil.applyDeadband(m_driverController.getLeftY() * OIConstants.kSLOWDRIVESPEEDLIMITER, OIConstants.kDriveDeadband),
           -MathUtil.applyDeadband(m_driverController.getLeftX() * OIConstants.kSLOWDRIVESPEEDLIMITER, OIConstants.kDriveDeadband),
-          -MathUtil.applyDeadband(m_driverController.getRightX() * OIConstants.kSLOWROTSPEEDLIMITER, OIConstants.kDriveDeadband),
+          -MathUtil.applyDeadband(m_driverController.getRightX() * OIConstants.kSLOWDRIVESPEEDLIMITER, OIConstants.kDriveDeadband),
           true),
       m_robotDrive));
 
@@ -192,9 +192,24 @@ public class RobotContainer {
     // moves left of the april tag to be in line with the coral from the center
     .whileTrue(new ManualMoveHorizontalDistance(m_robotDrive, "Left", FieldConstants.coralFromCenter));
 
-    // m_driverController.leftStick()
+   m_driverController.leftStick()
+   .toggleOnTrue(new RunCommand(
+    () -> m_robotDrive.drive(
+        -MathUtil.applyDeadband(m_driverController.getLeftY() * OIConstants.kFASTDRIVESPEEDLIMITER, OIConstants.kDriveDeadband),
+        -MathUtil.applyDeadband(m_driverController.getLeftX() * OIConstants.kFASTDRIVESPEEDLIMITER, OIConstants.kDriveDeadband),
+        -MathUtil.applyDeadband(m_driverController.getRightX() * OIConstants.kFASTDRIVESPEEDLIMITER, OIConstants.kDriveDeadband),
+        true),
+    m_robotDrive));
 
-    // m_driverController.rightStick()
+    m_driverController.rightStick()
+    .toggleOnTrue(new RunCommand(
+    () -> m_robotDrive.drive(
+        -MathUtil.applyDeadband(m_driverController.getLeftY() * OIConstants.kSLOWDRIVESPEEDLIMITER, OIConstants.kDriveDeadband),
+        -MathUtil.applyDeadband(m_driverController.getLeftX() * OIConstants.kSLOWDRIVESPEEDLIMITER, OIConstants.kDriveDeadband),
+        -MathUtil.applyDeadband(m_driverController.getRightX() * OIConstants.kSLOWDRIVESPEEDLIMITER, OIConstants.kDriveDeadband),
+        false),
+    m_robotDrive));
+
 
     m_driverController.rightTrigger(.5)
 

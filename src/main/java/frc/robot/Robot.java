@@ -16,6 +16,7 @@ import edu.wpi.first.cscore.CvSink;
 import edu.wpi.first.cscore.CvSource;
 import edu.wpi.first.cscore.HttpCamera;
 import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
+import edu.wpi.first.net.PortForwarder;
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -36,7 +37,7 @@ public class Robot extends LoggedRobot {
   private final RobotContainer m_robotContainer;
 
   UsbCamera camera1;
-  // HttpCamera limelightFeed;
+  HttpCamera limelightFeed;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -46,15 +47,17 @@ public class Robot extends LoggedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-    // camera1 = CameraServer.startAutomaticCapture(0);
-    // limelightFeed = new HttpCamera("limelight", "http://10.15.22.11:5800/", HttpCameraKind.kMJPGStreamer);
-    // CameraServer.startAutomaticCapture(limelightFeed);
+
+    CameraServer.startAutomaticCapture(0);
+    CameraServer.startAutomaticCapture(1);
+    limelightFeed = new HttpCamera("limelight", "http://10.15.22.11:5808/", HttpCameraKind.kMJPGStreamer);
+    CameraServer.startAutomaticCapture(limelightFeed);
 
     
 
     // ShuffleboardTab cameraTab = Shuffleboard.getTab("CameraTab");
     // HttpCamera limeLightFeed = new HttpCamera("limelight", "http://limelight.local:5800/stream.mjpg");
-    // // cameraTab.add("CameraFeed", limeLightFeed).withPosition(0, 0).withSize(15, 8);
+    // cameraTab.add("CameraFeed", limeLightFeed).withPosition(0, 0).withSize(15, 8);
     // CameraServer.startAutomaticCapture(limeLightFeed);
     // limeLightFeed.setResolution(640, 480);
     // // CvSink cvSink = CameraServer.getVideo();
@@ -65,6 +68,9 @@ public class Robot extends LoggedRobot {
 
   public void robotInit(){
     initializeLogging();
+    for (int port = 5800; port <= 5809; port++){
+      PortForwarder.add(port, "limelight.local", port);
+    }
   }
   /**
    * This function is called every 20 ms, no matter the mode. Use this for items like diagnostics
