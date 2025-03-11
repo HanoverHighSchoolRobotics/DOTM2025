@@ -132,5 +132,4 @@ public class ArmSubsystem extends SubsystemBase {
       () -> setGoal(goal)
     );
   }
-
 }

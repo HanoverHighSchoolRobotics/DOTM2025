@@ -25,10 +25,12 @@ import frc.robot.Constants.CoralIntakeConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.SecondaryWristConstants;
 import frc.robot.Constants.WristConstants;
 import frc.robot.commands.DriveClickToAngle;
 import frc.robot.commands.LimelightHorizontalAlign;
 import frc.robot.commands.LimelightRange;
+import frc.robot.commands.ManualClickToAngle;
 import frc.robot.commands.ManualMoveHorizontalDistance;
 import frc.robot.commands.ManualMoveVerticalDistance;
 import frc.robot.subsystems.AlgaeIntakeSubsystem;
@@ -37,6 +39,7 @@ import frc.robot.subsystems.ClimberSubsystem;
 import frc.robot.subsystems.CoralIntakeSubsystem;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.SecondaryWristSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 
 /*
@@ -53,6 +56,7 @@ public class RobotContainer {
   private final ElevatorSubsystem m_elevator = new ElevatorSubsystem();
   private final ArmSubsystem m_arm = new ArmSubsystem();
   private final WristSubsystem m_wrist = new WristSubsystem();
+  private final SecondaryWristSubsystem m_secondaryWrist = new SecondaryWristSubsystem();
   private final ClimberSubsystem m_climb = new ClimberSubsystem();
 
   // The driver's controller
@@ -64,13 +68,13 @@ public class RobotContainer {
   // Pathplanner Command List
   private void configureAutoCommands(){
     NamedCommands.registerCommand("CoralIntake", Commands.parallel(
-          m_coralIntake.autoCoralIntake(-1 * CoralIntakeConstants.CoralIntakeSpeed, 3)));
+          m_coralIntake.autoCoralIntake(-1 * CoralIntakeConstants.CoralIntakeSpeed, 1)));
     NamedCommands.registerCommand("CoralOuttake", Commands.parallel(
-          m_coralIntake.autoCoralIntake(1 * CoralIntakeConstants.CoralIntakeSpeed, 3)));
+          m_coralIntake.autoCoralIntake(1 * CoralIntakeConstants.CoralIntakeSpeed, 1)));
     NamedCommands.registerCommand("AlgaeIntake", Commands.parallel(
-          m_algaeIntake.autoAlgaeIntake(-1 * AlgaeIntakeConstants.AlgaeIntakeSpeed, 3)));
+          m_algaeIntake.autoAlgaeIntake(-1 * AlgaeIntakeConstants.AlgaeIntakeSpeed, 1)));
     NamedCommands.registerCommand("AlgaeOuttake", Commands.parallel(
-          m_algaeIntake.autoAlgaeIntake(1 * AlgaeIntakeConstants.AlgaeIntakeSpeed, 3)));
+          m_algaeIntake.autoAlgaeIntake(1 * AlgaeIntakeConstants.AlgaeIntakeSpeed, 1)));
     NamedCommands.registerCommand("MoveArmOut", Commands.parallel(
           m_arm.setGoalCmd(ArmConstants.OutOfTheWayPos)));
     NamedCommands.registerCommand("ElevatorToL4", Commands.parallel(
@@ -89,6 +93,11 @@ public class RobotContainer {
           new ManualMoveHorizontalDistance(m_robotDrive, "Left", FieldConstants.coralFromCenter)));
     NamedCommands.registerCommand("MoveRight", Commands.parallel(
           new ManualMoveHorizontalDistance(m_robotDrive, "Right", FieldConstants.coralFromCenter)));
+    NamedCommands.registerCommand("MoveUp", Commands.parallel(
+          new ManualMoveVerticalDistance(m_robotDrive, "Up", FieldConstants.realLimelightRangeStopToCoralStation)));
+    NamedCommands.registerCommand("DriveClickToAngle", Commands.parallel(
+          new ManualClickToAngle(m_robotDrive, 180)));
+          
   }
 
 
@@ -137,6 +146,10 @@ public class RobotContainer {
     autoChooser.addOption("CLICK! 10 OClock Auto", new PathPlannerAuto("10OClockAuto"));
     autoChooser.addOption("CLICK! 8 OClock Auto", new PathPlannerAuto("8OClockAuto"));
     autoChooser.addOption("CLICK! Move Out Auto", new PathPlannerAuto("MoveOutAuto"));
+    autoChooser.addOption("CLICK! TestAutoNoLime", new PathPlannerAuto("TestAuto"));
+    autoChooser.addOption("CLICK! TestAutoWithLime", new PathPlannerAuto("TestAutoWLimelight"));
+    autoChooser.addOption("CLICK! TestAutoWithLime", new PathPlannerAuto("TestAutoWLimelight"));
+
     // autoChooser.addOption("Work Please", new PathPlannerAuto("1CoralAutoWorkHope"));
 
 
@@ -258,11 +271,12 @@ public class RobotContainer {
       // yAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralFourPos));
 
     // m_auxController.start()
-    // set arm manual positive
-      // .onTrue(m_arm.SetArmSpeedCmd(ArmConstants.ArmSpeed))
-      // .onFalse(m_arm.SetArmSpeedCmd(0));
-    // set elevator to a setpoint
-      // startAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.StationPos));
+    // // set arm manual positive
+    // //   .onTrue(m_arm.SetArmSpeedCmd(ArmConstants.ArmSpeed))
+    // //   .onFalse(m_arm.SetArmSpeedCmd(0));
+    // // set elevator to a setpoint
+    // //   startAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.StationPos));
+    //   .onTrue(m_secondaryWrist.setGoalCmd(SecondaryWristConstants.L4WristPos));
 
     m_auxController.back()
     // set arm manual negative
@@ -283,15 +297,18 @@ public class RobotContainer {
       .whileTrue(m_algaeIntake.AlgaeIntakeCmd(-1 * AlgaeIntakeConstants.AlgaeIntakeSpeed))
       .onFalse(m_algaeIntake.AlgaeIntakeCmd(0));
 
-    // m_auxController.rightStick()
+    m_auxController.rightStick()
     // sets the coral intake inwards
     //   .whileTrue(m_coralIntake.CoralIntakeCmd(CoralIntakeConstants.CoralIntakeSpeed))
     //   .onFalse(m_coralIntake.CoralIntakeCmd(0));
+      .onTrue(m_secondaryWrist.setGoalCmd(SecondaryWristConstants.L4WristPos));
 
-    // m_auxController.leftStick()
+    m_auxController.leftStick()
     // sets the coral intake outwards
       // .whileTrue(m_coralIntake.CoralIntakeCmd(-1 * CoralIntakeConstants.CoralIntakeSpeed))
       // .onFalse(m_coralIntake.CoralIntakeCmd(0));
+      .onTrue(m_secondaryWrist.setGoalCmd(SecondaryWristConstants.L3WristPos));
+
 
     m_auxController.rightTrigger(.5)
     // sets the coral intake inwards

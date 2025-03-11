@@ -115,6 +115,17 @@ public final class Configs {
 
     }
 
+    public static final class SecondaryWrist {
+        public static final SparkMaxConfig wristMotorConfig = new SparkMaxConfig();
+
+        static {
+                wristMotorConfig
+                        .idleMode(IdleMode.kBrake)
+                        .inverted(WristConstants.WristInverted);
+        }
+
+    }
+
     public static final class Climber {
         public static final SparkMaxConfig climberMotorConfig = new SparkMaxConfig();
 

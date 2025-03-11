@@ -137,21 +137,21 @@ public final class Constants {
     public static final double kI = 0;
     public static final double kD = 0;
 
-    public static final double MaxPIDVelocity = 10;
-    public static final double MaxPIDAcceleration = 2;
+    public static final double MaxPIDVelocity = 15; //15
+    public static final double MaxPIDAcceleration = 5; //5
 
     public static final double PIDErrorAllowed = .05;
 
     // command input constants
-    public static final double ElevatorUpSpeed = .7;
-    public static final double ElevatorDownSpeed = .4;
+    public static final double ElevatorUpSpeed = .7; //.7
+    public static final double ElevatorDownSpeed = .6; //.4
 
     // PID Positions
     // public static final double CoralOnePos = 0;
     public static final double CoralTwoPos = 0;
     public static final double CoralThreePos = 48;
-    public static final double CoralFourPos = 123; //132
-    public static final double StationPos = 9.3;
+    public static final double CoralFourPos = 132; //132 75 inches top of coral
+    public static final double StationPos = 12;
   }
   public static final class CoralIntakeConstants {
     // subsystem constants
@@ -161,7 +161,7 @@ public final class Constants {
 
     // command input constants
     public static final double CoralIntakeSpeed = .45;
-    public static final double CoralOuttakeSpeed = .3;
+    public static final double CoralOuttakeSpeed = .3; //.3
   }
 
   public static final class AlgaeIntakeConstants {
@@ -171,7 +171,7 @@ public final class Constants {
     public static final boolean AlgaeIntakeMotorInverted = false;
 
     // command input constants
-    public static final double AlgaeIntakeSpeed = .35;
+    public static final double AlgaeIntakeSpeed = .5;
   }
 
   public static final class ArmConstants {
@@ -214,12 +214,40 @@ public final class Constants {
 
     public static final double MaxPIDSetSpeed = .4;
 
-    public static final double MaxPIDVelocity = .3;
-    public static final double MaxPIDAcceleration = .1;
+    public static final double MaxPIDVelocity = .7; // play around with this - Leighton
+    public static final double MaxPIDAcceleration = .3;  // play around with this - Leighton
 
     public static final double PIDErrorAllowed = .1;
     // command input constants
-    public static final double WristSpeed = .35;
+    public static final double WristSpeed = .35; // Ryan you make all the mistakes - Devon Centeno, March 1st 2025, 11:57 AM EST.
+                                                 // Devon you the mistake 😂😂😂 - Ryan Palmer, March 6th 2025, 4:09 PM EST.
+
+  }
+
+  public static final class SecondaryWristConstants {
+    // subsystem constants
+    public static final int WristMotorID = 20; 
+    public static final boolean WristInverted = false; 
+
+    public static final double MaxWristMargin = 1000;
+    public static final double MinWristMargin = -1000;
+    
+    public static final double kP = .05;
+    public static final double kI = 0;
+    public static final double kD = 0;
+
+    public static final double MaxPIDSetSpeed = .4;
+
+    public static final double MaxPIDVelocity = .7; // play around with this - Leighton
+    public static final double MaxPIDAcceleration = .3;  // play around with this - Leighton
+
+    public static final double PIDErrorAllowed = .1;
+    // command input constants
+    public static final double WristSpeed = .35; // Ryan you make all the mistakes - Devon Centeno, March 1st 2025, 11:57 AM EST.
+                                                 // Devon you the mistake 😂😂😂 - Ryan Palmer, March 6th 2025, 4:09 PM EST.
+
+    public static final double L4WristPos = .1;
+    public static final double L3WristPos = .4;
 
     
   }
@@ -241,6 +269,7 @@ public final class Constants {
     public static final double fieldWidth = 8.025;
 
     public static final double limelightRangeStopToCoralStation = .064;
+    public static final double realLimelightRangeStopToCoralStation = .5;
   }
 
   public static final class ClimberConstants {
@@ -249,7 +278,7 @@ public final class Constants {
     public static final boolean ClimberInverted = false;
     public static final double MaxClimbMargin = 100000;
     public static final double MinClimbMargin = -100000;
-    public static final double ClimbUpSpeed = .6;
+    public static final double ClimbUpSpeed = .9;
     public static final double ClimbDownSpeed = .4;
   }
 

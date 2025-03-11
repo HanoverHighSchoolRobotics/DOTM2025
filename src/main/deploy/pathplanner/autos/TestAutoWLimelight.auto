@@ -13,7 +13,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MiddleBlueCageTo4OClock"
+            "pathName": "MidBlueCageToSide2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveClickToAngle"
           }
         },
         {
@@ -29,21 +35,39 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 3.0
+          }
+        },
+        {
           "type": "named",
           "data": {
-            "name": "Move Left"
+            "name": "DriveClickToAngle"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "4OClocktoLeftFeeder"
+            "name": "MoveUp"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "LeftFeederTo3OClock"
+            "name": "DriveClickToAngle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveClickToAngle"
           }
         }
       ]

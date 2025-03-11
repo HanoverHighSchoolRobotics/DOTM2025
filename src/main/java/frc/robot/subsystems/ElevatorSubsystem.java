@@ -56,7 +56,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
 
     if(goalSet && !elevatorPIDController.atSetpoint()){
-      setElevatorSpeed(MathUtil.clamp(elevatorPIDController.calculate(getPosition(), PIDgoal), -.85, .85));
+      setElevatorSpeed(MathUtil.clamp(elevatorPIDController.calculate(getPosition(), PIDgoal), -.9, .9));
     }
     else if (goalSet)
     {

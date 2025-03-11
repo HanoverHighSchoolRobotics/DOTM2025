@@ -11,21 +11,15 @@
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "MiddleBlueCageTo4OClock"
+            "waitTime": 5.0
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "4OClocktoLeftFeeder"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "LeftFeederTo3OClock"
+            "name": "ElevatorToL3"
           }
         }
       ]

@@ -7,13 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MiddleBlueCageTo4OClock"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "CoralOuttake"
+            "pathName": "MiddleTo3OClock"
           }
         }
       ]
