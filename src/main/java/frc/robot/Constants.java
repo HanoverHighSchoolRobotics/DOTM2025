@@ -125,7 +125,7 @@ public final class Constants {
   public static final class ElevatorConstants {
     // subsystem constants
     public static final int LeftMotorID = 13;
-    public static final int RightMotorID = 12;
+    // public static final int RightMotorID = 12;
 
     public static final boolean LeftMotorInverted = false;
     public static final boolean RightMotorInvertedFromLeft = true;
@@ -226,7 +226,7 @@ public final class Constants {
 
   public static final class SecondaryWristConstants {
     // subsystem constants
-    public static final int WristMotorID = 20; 
+    public static final int WristMotorID = 12; 
     public static final boolean WristInverted = false; 
 
     public static final double MaxWristMargin = 1000;
@@ -268,7 +268,7 @@ public final class Constants {
 
     public static final double fieldWidth = 8.025;
 
-    public static final double limelightRangeStopToCoralStation = .064;
+    public static final double moveBackFromCoral = .064;
     public static final double realLimelightRangeStopToCoralStation = .5;
   }
 

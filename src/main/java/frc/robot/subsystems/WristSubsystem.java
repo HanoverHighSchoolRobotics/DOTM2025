@@ -73,7 +73,7 @@ public class WristSubsystem extends SubsystemBase {
       if(speed < 0){
         wristMotor.set(speed);
       } 
-      else 
+      else
       {
         wristMotor.stopMotor();
       }

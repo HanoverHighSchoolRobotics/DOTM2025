@@ -131,6 +131,11 @@ public class RobotContainer {
         () -> m_wrist.setWristSpeedVoidCmd(MathUtil.applyDeadband(m_auxController.getRightY() * WristConstants.WristSpeed * -1, OIConstants.kAuxDeadband)), 
         m_wrist));
 
+    m_secondaryWrist.setDefaultCommand(
+      new RunCommand(
+        () -> m_secondaryWrist.setWristSpeedVoidCmd(MathUtil.applyDeadband(m_auxController.getRightY() * SecondaryWristConstants.WristSpeed * -1, OIConstants.kAuxDeadband)), 
+        m_secondaryWrist));
+
     // Build an auto chooser. This will use Commands.none() as the default option.
     configureAutoCommands();
 
@@ -148,7 +153,7 @@ public class RobotContainer {
     autoChooser.addOption("CLICK! Move Out Auto", new PathPlannerAuto("MoveOutAuto"));
     autoChooser.addOption("CLICK! TestAutoNoLime", new PathPlannerAuto("TestAuto"));
     autoChooser.addOption("CLICK! TestAutoWithLime", new PathPlannerAuto("TestAutoWLimelight"));
-    autoChooser.addOption("CLICK! TestAutoWithLime", new PathPlannerAuto("TestAutoWLimelight"));
+    // autoChooser.addOption("CLICK! TestAutoWithLime", new PathPlannerAuto("TestAutoWLimelight"));
 
     // autoChooser.addOption("Work Please", new PathPlannerAuto("1CoralAutoWorkHope"));
 
@@ -169,8 +174,8 @@ public class RobotContainer {
     
     // JoystickButton aDriverButton = new JoystickButton(m_driverController, XboxController.Button.kA.value);
     m_driverController.a()
-//    .whileTrue(new ManualMoveVerticalDistance(m_robotDrive, "Up", FieldConstants.limelightRangeStopToCoralStation));
-    .whileTrue(new ManualMoveVerticalDistance(m_robotDrive, "Down", FieldConstants.limelightRangeStopToCoralStation));
+//    .whileTrue(new ManualMoveVerticalDistance(m_robotDrive, "Up", FieldConstants.moveBackFromCoral));
+    .whileTrue(new ManualMoveVerticalDistance(m_robotDrive, "Down", FieldConstants.moveBackFromCoral));
 
     m_driverController.b()
     .toggleOnTrue(new RunCommand(

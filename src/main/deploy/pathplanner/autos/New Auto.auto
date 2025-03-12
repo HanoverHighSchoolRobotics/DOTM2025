@@ -5,15 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "MoveArmOut"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "MidBlueCageToSide2"
+            "pathName": "MidBlueCageTo1OClock"
           }
         },
         {
@@ -47,18 +41,6 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DriveClickToAngle"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "MoveUp"
@@ -73,13 +55,25 @@
         {
           "type": "named",
           "data": {
-            "name": "MoveLeft"
+            "name": "MoveRight"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "DriveClickToAngle"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1OClockToFarLeftFeeder"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         }
       ]

@@ -63,15 +63,15 @@ public final class Configs {
 
     public static final class Elevator {
         public static final SparkMaxConfig leftElevatorMotorConfig = new SparkMaxConfig();
-        public static final SparkMaxConfig rightElevatorMotorConfig = new SparkMaxConfig();
+        // public static final SparkMaxConfig rightElevatorMotorConfig = new SparkMaxConfig();
 
         static {
             leftElevatorMotorConfig
                     .idleMode(IdleMode.kBrake)
                     .inverted(ElevatorConstants.LeftMotorInverted);
-            rightElevatorMotorConfig
-                    .idleMode(IdleMode.kBrake)
-                    .follow(ElevatorConstants.LeftMotorID, ElevatorConstants.RightMotorInvertedFromLeft);
+        //     rightElevatorMotorConfig
+        //             .idleMode(IdleMode.kBrake)
+        //             .follow(ElevatorConstants.LeftMotorID, ElevatorConstants.RightMotorInvertedFromLeft);
         }
     }
     public static final class AlgaeIntake {
@@ -83,6 +83,7 @@ public final class Configs {
                         .inverted(AlgaeIntakeConstants.AlgaeIntakeMotorInverted);
         }
     }
+    
     public static final class CoralIntake {
         public static final SparkMaxConfig coralIntakeMotorConfig = new SparkMaxConfig(); 
 

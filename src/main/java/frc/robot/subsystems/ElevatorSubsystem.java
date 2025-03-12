@@ -21,7 +21,7 @@ import frc.robot.Constants.ElevatorConstants;
 
 public class ElevatorSubsystem extends SubsystemBase {
 
-  SparkMax rightElevatorMotor;
+  // SparkMax rightElevatorMotor;
   SparkMax leftElevatorMotor;
 
   RelativeEncoder elevatorEncoder;
@@ -35,13 +35,13 @@ public class ElevatorSubsystem extends SubsystemBase {
 
   public ElevatorSubsystem() {
     leftElevatorMotor = new SparkMax(ElevatorConstants.LeftMotorID, MotorType.kBrushless);
-    rightElevatorMotor = new SparkMax(ElevatorConstants.RightMotorID, MotorType.kBrushless);
+    // rightElevatorMotor = new SparkMax(ElevatorConstants.RightMotorID, MotorType.kBrushless);
 
     leftElevatorMotor.configure(Configs.Elevator.leftElevatorMotorConfig, ResetMode.kResetSafeParameters,
     PersistMode.kPersistParameters);
 
-    rightElevatorMotor.configure(Configs.Elevator.rightElevatorMotorConfig, ResetMode.kResetSafeParameters,
-    PersistMode.kPersistParameters);
+    // rightElevatorMotor.configure(Configs.Elevator.rightElevatorMotorConfig, ResetMode.kResetSafeParameters,
+    // PersistMode.kPersistParameters);
 
     elevatorEncoder = leftElevatorMotor.getEncoder();
     
