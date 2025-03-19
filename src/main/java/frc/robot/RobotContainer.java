@@ -24,6 +24,7 @@ import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.CoralIntakeConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.LimelightConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.SecondaryWristConstants;
 import frc.robot.Constants.WristConstants;
@@ -68,9 +69,11 @@ public class RobotContainer {
   // Pathplanner Command List
   private void configureAutoCommands(){
     NamedCommands.registerCommand("CoralIntake", Commands.parallel(
-          m_coralIntake.autoCoralIntake(-1 * CoralIntakeConstants.CoralIntakeSpeed, 1)));
+          m_coralIntake.autoCoralIntake(-1 * CoralIntakeConstants.CoralIntakeSpeed, .25)));
     NamedCommands.registerCommand("CoralOuttake", Commands.parallel(
-          m_coralIntake.autoCoralIntake(1 * CoralIntakeConstants.CoralIntakeSpeed, 1)));
+          m_coralIntake.autoCoralIntake(1 * CoralIntakeConstants.CoralIntakeSpeed, .25)));
+    NamedCommands.registerCommand("CoralStop", Commands.parallel(
+          m_coralIntake.autoCoralIntake(1 * 0, .05)));
     NamedCommands.registerCommand("AlgaeIntake", Commands.parallel(
           m_algaeIntake.autoAlgaeIntake(-1 * AlgaeIntakeConstants.AlgaeIntakeSpeed, 1)));
     NamedCommands.registerCommand("AlgaeOuttake", Commands.parallel(
@@ -87,17 +90,36 @@ public class RobotContainer {
           m_elevator.setGoalCmd(ElevatorConstants.StationPos)));
     NamedCommands.registerCommand("LimelightHorizontalAlign", Commands.parallel(
           new LimelightHorizontalAlign(m_robotDrive)));
-    NamedCommands.registerCommand("LimelightRange", Commands.parallel(
-          new LimelightRange(m_robotDrive)));
+    NamedCommands.registerCommand("LimelightRangeWithCoral", Commands.parallel(
+          new LimelightRange(m_robotDrive, LimelightConstants.CoralLineUpArea)));
+    NamedCommands.registerCommand("LimelightRangeWithStation", Commands.parallel(
+          new LimelightRange(m_robotDrive, LimelightConstants.StationLineUpArea)));
     NamedCommands.registerCommand("MoveLeft", Commands.parallel(
           new ManualMoveHorizontalDistance(m_robotDrive, "Left", FieldConstants.coralFromCenter)));
     NamedCommands.registerCommand("MoveRight", Commands.parallel(
           new ManualMoveHorizontalDistance(m_robotDrive, "Right", FieldConstants.coralFromCenter)));
     NamedCommands.registerCommand("MoveUp", Commands.parallel(
-          new ManualMoveVerticalDistance(m_robotDrive, "Up", FieldConstants.realLimelightRangeStopToCoralStation)));
-    NamedCommands.registerCommand("DriveClickToAngle", Commands.parallel(
+          new ManualMoveVerticalDistance(m_robotDrive, "Up", FieldConstants.realLimelightRangeStopToCoral)));
+    NamedCommands.registerCommand("MoveUpStation", Commands.parallel(
+          new ManualMoveVerticalDistance(m_robotDrive, "Up", FieldConstants.realLimelightRangeStopToStation)));
+    NamedCommands.registerCommand("DriveClickToAngle180", Commands.parallel(
           new ManualClickToAngle(m_robotDrive, 180)));
-          
+    NamedCommands.registerCommand("DriveClickToAngle300", Commands.parallel(
+          new ManualClickToAngle(m_robotDrive, 300)));
+    NamedCommands.registerCommand("DriveClickToAngle120", Commands.parallel(
+          new ManualClickToAngle(m_robotDrive, 120)));
+    NamedCommands.registerCommand("DriveClickToAngle130", Commands.parallel(
+          new ManualClickToAngle(m_robotDrive, 130)));
+    NamedCommands.registerCommand("DriveClickToAngle140", Commands.parallel(
+          new ManualClickToAngle(m_robotDrive, 140)));
+    NamedCommands.registerCommand("DriveClickToAngle240", Commands.parallel(
+          new ManualClickToAngle(m_robotDrive, 240)));
+    NamedCommands.registerCommand("ElWristIntakePos", Commands.parallel(
+          m_secondaryWrist.setGoalCmd(SecondaryWristConstants.IntakeWristPos)));
+    NamedCommands.registerCommand("ElWristScorePos", Commands.parallel(
+          m_secondaryWrist.setGoalCmd(SecondaryWristConstants.ScoreWristPos)));  
+    NamedCommands.registerCommand("StopRobot", Commands.parallel(
+          m_robotDrive.stopRobotCmd()));         
   }
 
 
@@ -131,10 +153,10 @@ public class RobotContainer {
         () -> m_wrist.setWristSpeedVoidCmd(MathUtil.applyDeadband(m_auxController.getRightY() * WristConstants.WristSpeed * -1, OIConstants.kAuxDeadband)), 
         m_wrist));
 
-    m_secondaryWrist.setDefaultCommand(
-      new RunCommand(
-        () -> m_secondaryWrist.setWristSpeedVoidCmd(MathUtil.applyDeadband(m_auxController.getRightY() * SecondaryWristConstants.WristSpeed * -1, OIConstants.kAuxDeadband)), 
-        m_secondaryWrist));
+    // m_secondaryWrist.setDefaultCommand(
+    //   new RunCommand(
+    //     () -> m_secondaryWrist.setWristSpeedVoidCmd(MathUtil.applyDeadband(m_auxController.getRightY() * SecondaryWristConstants.WristSpeed * -1, OIConstants.kAuxDeadband)), 
+    //     m_secondaryWrist));
 
     // Build an auto chooser. This will use Commands.none() as the default option.
     configureAutoCommands();
@@ -153,6 +175,10 @@ public class RobotContainer {
     autoChooser.addOption("CLICK! Move Out Auto", new PathPlannerAuto("MoveOutAuto"));
     autoChooser.addOption("CLICK! TestAutoNoLime", new PathPlannerAuto("TestAuto"));
     autoChooser.addOption("CLICK! TestAutoWithLime", new PathPlannerAuto("TestAutoWLimelight"));
+    autoChooser.addOption("CLICK! MidRedCageTo6OClock", new PathPlannerAuto("6OClockAutoWLimelight"));
+    autoChooser.addOption("CLICK! 2OClockAutoWLimelight", new PathPlannerAuto("2OClockAutoWLimelight"));
+
+
     // autoChooser.addOption("CLICK! TestAutoWithLime", new PathPlannerAuto("TestAutoWLimelight"));
 
     // autoChooser.addOption("Work Please", new PathPlannerAuto("1CoralAutoWorkHope"));
@@ -192,7 +218,7 @@ public class RobotContainer {
 
     m_driverController.y()
     // gets in range (close to) the april tag
-    .whileTrue(new LimelightRange(m_robotDrive));
+    .whileTrue(new LimelightRange(m_robotDrive, LimelightConstants.StationLineUpArea));
 
     m_driverController.start()
     // clicks to an angle on a hexagon that you are closest to
@@ -200,7 +226,8 @@ public class RobotContainer {
 
     m_driverController.back()
     // aligns horizontally with the april tag
-    .whileTrue(new LimelightHorizontalAlign(m_robotDrive));
+//     .whileTrue(new LimelightHorizontalAlign(m_robotDrive));
+    .whileTrue(new ManualMoveVerticalDistance(m_robotDrive, "Up", FieldConstants.realLimelightRangeStopToStation));
 
     m_driverController.rightBumper()
     // moves right of the april tag to be in line with the coral from the center
@@ -246,7 +273,8 @@ public class RobotContainer {
     // set elevator to a setpoint
       // aAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralOnePos));
 
-    .onTrue(m_elevator.setGoalCmd(ElevatorConstants.StationPos));
+    .onTrue(m_elevator.setGoalCmd(ElevatorConstants.StationPos)
+    .andThen(m_secondaryWrist.setGoalCmd(SecondaryWristConstants.IntakeWristPos)));
 
     m_auxController.b()
     // set wrist speed negative
@@ -255,14 +283,16 @@ public class RobotContainer {
     //set elevator to a setpoint
       // bAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralTwoPos));
     
-    .onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralTwoPos));
+    .onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralTwoPos)
+    .andThen(m_secondaryWrist.setGoalCmd(SecondaryWristConstants.ScoreWristPos)));
     
  
     m_auxController.x()
     // set elevator manual positive
       // .whileTrue(m_elevator.SetElevatorSpeedCmd(ElevatorConstants.ElevatorUpSpeed))
       // .onFalse(m_elevator.SetElevatorSpeedCmd(0));
-      .onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralThreePos));
+      .onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralThreePos)
+      .andThen(m_secondaryWrist.setGoalCmd(SecondaryWristConstants.ScoreWristPos)));
 
     // set elevator to a setpoint
       // xAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralThreePos));
@@ -271,7 +301,8 @@ public class RobotContainer {
     // set elevator manual negative
       // .onTrue(m_elevator.SetElevatorSpeedCmd(-1 * ElevatorConstants.ElevatorDownSpeed))
       // .onFalse(m_elevator.SetElevatorSpeedCmd(0));
-      .onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralFourPos));
+      .onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralFourPos)
+      .andThen(m_secondaryWrist.setGoalCmd(SecondaryWristConstants.L4WristPos)));
     // set elevator to a setpoint
       // yAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralFourPos));
 
@@ -306,13 +337,13 @@ public class RobotContainer {
     // sets the coral intake inwards
     //   .whileTrue(m_coralIntake.CoralIntakeCmd(CoralIntakeConstants.CoralIntakeSpeed))
     //   .onFalse(m_coralIntake.CoralIntakeCmd(0));
-      .onTrue(m_secondaryWrist.setGoalCmd(SecondaryWristConstants.L4WristPos));
+      .onTrue(m_secondaryWrist.setGoalCmd(SecondaryWristConstants.IntakeWristPos));
 
     m_auxController.leftStick()
     // sets the coral intake outwards
       // .whileTrue(m_coralIntake.CoralIntakeCmd(-1 * CoralIntakeConstants.CoralIntakeSpeed))
       // .onFalse(m_coralIntake.CoralIntakeCmd(0));
-      .onTrue(m_secondaryWrist.setGoalCmd(SecondaryWristConstants.L3WristPos));
+      .onTrue(m_secondaryWrist.setGoalCmd(SecondaryWristConstants.ScoreWristPos));
 
 
     m_auxController.rightTrigger(.5)

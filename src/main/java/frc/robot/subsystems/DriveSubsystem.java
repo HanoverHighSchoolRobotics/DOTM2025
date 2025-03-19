@@ -344,6 +344,12 @@ public class DriveSubsystem extends SubsystemBase {
     );
   }
 
+  public Command stopRobotCmd(){
+    return runOnce(
+      () -> drive(0, 0, 0, false)
+    );
+  }
+
   /**
    * Sets the swerve ModuleStates.
    *

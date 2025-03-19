@@ -33,6 +33,8 @@ public class ElevatorSubsystem extends SubsystemBase {
   private double PIDgoal;
   private boolean goalSet;
 
+  private double clampSpeed;
+
   public ElevatorSubsystem() {
     leftElevatorMotor = new SparkMax(ElevatorConstants.LeftMotorID, MotorType.kBrushless);
     // rightElevatorMotor = new SparkMax(ElevatorConstants.RightMotorID, MotorType.kBrushless);
@@ -49,6 +51,8 @@ public class ElevatorSubsystem extends SubsystemBase {
 
     goalSet = false;
 
+    clampSpeed = ElevatorConstants.absMaxPIDSpeed;
+
     elevatorPIDController.setTolerance(ElevatorConstants.PIDErrorAllowed);
   }
 
@@ -56,7 +60,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   public void periodic() {
 
     if(goalSet && !elevatorPIDController.atSetpoint()){
-      setElevatorSpeed(MathUtil.clamp(elevatorPIDController.calculate(getPosition(), PIDgoal), -.9, .9));
+      setElevatorSpeed(MathUtil.clamp(elevatorPIDController.calculate(getPosition(), PIDgoal), -1 * clampSpeed, clampSpeed));
     }
     else if (goalSet)
     {
@@ -128,6 +132,11 @@ public class ElevatorSubsystem extends SubsystemBase {
   // sets a goal and for as long as the robot is on
   // the elevator will do its best to reach this goal and is used through periodic
   public void setGoal(double goal){
+    // if(goal == ElevatorConstants.CoralFourPos){
+    //   clampSpeed = .3; //float slower speed 
+    // } else {
+    //   clampSpeed = ElevatorConstants.absMaxPIDSpeed;
+    // }
     if(goal <= ElevatorConstants.MaxElevatorMargin && goal >= ElevatorConstants.MinElevatorMargin){
       this.PIDgoal = goal;
       elevatorPIDController.setGoal(goal);

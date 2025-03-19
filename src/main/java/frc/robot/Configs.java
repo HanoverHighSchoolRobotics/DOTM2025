@@ -9,6 +9,7 @@ import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.CoralIntakeConstants;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.SecondaryWristConstants;
 import frc.robot.Constants.WristConstants;
 import frc.robot.Constants.AlgaeIntakeConstants;
 
@@ -122,7 +123,7 @@ public final class Configs {
         static {
                 wristMotorConfig
                         .idleMode(IdleMode.kBrake)
-                        .inverted(WristConstants.WristInverted);
+                        .inverted(SecondaryWristConstants.WristInverted);
         }
 
     }

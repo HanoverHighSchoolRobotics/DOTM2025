@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.007786885245899,
-        "y": 1.9091700819672122
+        "x": 7.120696721311476,
+        "y": 1.8732069672131149
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.832991803278686,
-        "y": 2.772284836065573
+        "x": 5.945901639344263,
+        "y": 2.736321721311476
       },
       "isLocked": false,
       "linkedName": "MiddleRedCage"
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 180.0
+    "rotation": 0.0
   },
   "useDefaultConstraints": true
 }

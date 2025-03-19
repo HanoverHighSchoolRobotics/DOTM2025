@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class LimelightRange extends Command {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   private final DriveSubsystem m_drive;
+  private double desiredArea;
   private boolean aligned = false;
 
   /**
@@ -21,8 +22,9 @@ public class LimelightRange extends Command {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public LimelightRange(DriveSubsystem m_drive) {
+  public LimelightRange(DriveSubsystem m_drive, double desiredArea) {
     this.m_drive = m_drive;
+    this.desiredArea = desiredArea;
     addRequirements(m_drive);
   }
 
@@ -38,12 +40,12 @@ public class LimelightRange extends Command {
   public void execute() {
     double area = LimelightHelpers.getTA("");
     // double rotSpeed = LimelightConstants.ROTkP * LimelightHelpers.getTX("limelight") * -1 * DriveConstants.kMaxAngularSpeed;
-    if(area < LimelightConstants.CloseEnoughArea && area != 0){
-      if(LimelightConstants.RANGEkP * (4.45 - area) * DriveConstants.MaxMoveInRangeSpeed >= DriveConstants.MaxMoveInRangeSpeed){
+    if(area < (desiredArea) && area != 0){
+      if(LimelightConstants.RANGEkP * (desiredArea + .3 - area) * DriveConstants.MaxMoveInRangeSpeed >= DriveConstants.MaxMoveInRangeSpeed){
         double xSpeed = DriveConstants.MaxMoveInRangeSpeed;
         m_drive.drive(xSpeed, 0, 0, false);
       }else{
-        double xSpeed = LimelightConstants.RANGEkP * (4.45 - area) * DriveConstants.MaxMoveInRangeSpeed;
+        double xSpeed = LimelightConstants.RANGEkP * (desiredArea + .3 - area) * DriveConstants.MaxMoveInRangeSpeed;
         m_drive.drive(xSpeed, 0, 0, false);
       }
     } else {

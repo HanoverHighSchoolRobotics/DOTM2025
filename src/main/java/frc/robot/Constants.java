@@ -67,10 +67,10 @@ public final class Constants {
     public static final double HorizontalAlignmentSpeed = .2;
     public static final double HorizontalAlignmentkP = 1.5;
 
-    public static final double MaxMoveInRangeSpeed = .2;
+    public static final double MaxMoveInRangeSpeed = .3;
 
     public static final double SlowRotSpeed = .2;
-    public static final double VerticalAlignmentSpeed = .2;
+    public static final double VerticalAlignmentSpeed = .5;
   }
 
   public static final class ModuleConstants {
@@ -96,11 +96,11 @@ public final class Constants {
     public static final int kAuxControllerPort = 1;
     public static final double kAuxDeadband = 0.05;
 
-    public static final double kFASTDRIVESPEEDLIMITER = .85;
+    public static final double kFASTDRIVESPEEDLIMITER = .8;
     public static final double kFASTROTSPEEDLIMITER = .7;
 
-    public static final double kSLOWDRIVESPEEDLIMITER = .2;
-    public static final double kSLOWROTSPEEDLIMITER = .2;
+    public static final double kSLOWDRIVESPEEDLIMITER = .3;
+    public static final double kSLOWROTSPEEDLIMITER = .25;
   }
 
   public static final class AutoConstants {
@@ -130,28 +130,30 @@ public final class Constants {
     public static final boolean LeftMotorInverted = false;
     public static final boolean RightMotorInvertedFromLeft = true;
 
-    public static final double MaxElevatorMargin = 145;
+    public static final double MaxElevatorMargin = 180;
     public static final double MinElevatorMargin = -5;
 
     public static final double kP = .3; //  OG was 3; touch this and stuff may start oscillating (dont increase w/o my permission)
     public static final double kI = 0;
     public static final double kD = 0;
 
-    public static final double MaxPIDVelocity = 15; //15
-    public static final double MaxPIDAcceleration = 5; //5
+    public static final double absMaxPIDSpeed = .9;
+
+    public static final double MaxPIDVelocity = 18; //15
+    public static final double MaxPIDAcceleration = 6; //5
 
     public static final double PIDErrorAllowed = .05;
 
     // command input constants
-    public static final double ElevatorUpSpeed = .7; //.7
-    public static final double ElevatorDownSpeed = .6; //.4
+    public static final double ElevatorUpSpeed = .8; //.7
+    public static final double ElevatorDownSpeed = .45; //.4
 
     // PID Positions
     // public static final double CoralOnePos = 0;
     public static final double CoralTwoPos = 0;
-    public static final double CoralThreePos = 48;
-    public static final double CoralFourPos = 132; //132 75 inches top of coral
-    public static final double StationPos = 12;
+    public static final double CoralThreePos = 65.5;
+    public static final double CoralFourPos = 176.5; //132 75 inches top of x
+    public static final double StationPos = 12.5;
   }
   public static final class CoralIntakeConstants {
     // subsystem constants
@@ -161,7 +163,7 @@ public final class Constants {
 
     // command input constants
     public static final double CoralIntakeSpeed = .45;
-    public static final double CoralOuttakeSpeed = .3; //.3
+    public static final double CoralOuttakeSpeed = .45; //.3
   }
 
   public static final class AlgaeIntakeConstants {
@@ -227,10 +229,10 @@ public final class Constants {
   public static final class SecondaryWristConstants {
     // subsystem constants
     public static final int WristMotorID = 12; 
-    public static final boolean WristInverted = false; 
+    public static final boolean WristInverted = true; 
 
-    public static final double MaxWristMargin = 1000;
-    public static final double MinWristMargin = -1000;
+    public static final double MaxWristMargin = 13;
+    public static final double MinWristMargin = 0;
     
     public static final double kP = .05;
     public static final double kI = 0;
@@ -243,33 +245,37 @@ public final class Constants {
 
     public static final double PIDErrorAllowed = .1;
     // command input constants
-    public static final double WristSpeed = .35; // Ryan you make all the mistakes - Devon Centeno, March 1st 2025, 11:57 AM EST.
+    public static final double WristSpeed = .10; // Ryan you make all the mistakes - Devon Centeno, March 1st 2025, 11:57 AM EST.
                                                  // Devon you the mistake 😂😂😂 - Ryan Palmer, March 6th 2025, 4:09 PM EST.
 
-    public static final double L4WristPos = .1;
-    public static final double L3WristPos = .4;
+    public static final double IntakeWristPos = 12.5;
+    public static final double ScoreWristPos = 7.8;
+    public static final double L4WristPos = 6.8;
 
     
   }
 
   public static final class LimelightConstants {
     public static final double ROTkP = .035;
-    public static final double RANGEkP = .4;
+    public static final double RANGEkP = .5;
 
-    public static final double HORkP = .01;
-    public static final double MaxAlignSpeed = .2;
+    public static final double HORkP = .02;
+    public static final double MaxAlignSpeed = .3;
 
-    public static final double CloseEnoughArea = 4.15;
+    public static final double CoralLineUpArea = 4.15;
+    public static final double StationLineUpArea = 4.15;
+
   }
 
   public static final class FieldConstants {
-    public static final double coralToCoralLength = Units.inchesToMeters(13.25);
+    public static final double coralToCoralLength = Units.inchesToMeters(13);
     public static final double coralFromCenter = coralToCoralLength / 2;
 
     public static final double fieldWidth = 8.025;
 
     public static final double moveBackFromCoral = .064;
-    public static final double realLimelightRangeStopToCoralStation = .5;
+    public static final double realLimelightRangeStopToCoral = .57;
+    public static final double realLimelightRangeStopToStation = 1.8;
   }
 
   public static final class ClimberConstants {

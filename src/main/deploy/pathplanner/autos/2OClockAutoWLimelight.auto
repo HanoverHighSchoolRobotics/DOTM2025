@@ -1,0 +1,369 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveArmOut"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MidBlueCageToSide1"
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "DriveClickToAngle240"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LimelightHorizontalAlign"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "DriveClickToAngle240"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LimelightRangeWithCoral"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "DriveClickToAngle240"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElWristScorePos"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "DriveClickToAngle240"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "MoveUp"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "DriveClickToAngle240"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorToL2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveLeft"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveClickToAngle240"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopRobot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralOuttake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralStop"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2OClockToLeftFeeder"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveClickToAngle140"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElevatorToStation"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ElWristIntakePos"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LimelightHorizontalAlign"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveClickToAngle140"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LimelightRangeWithStation"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveClickToAngle140"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "CoralIntake"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 3.0
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "MoveUpStation"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "DriveClickToAngle140"
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "StopRobot"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "path",
+                      "data": {
+                        "pathName": "LeftFeederToSide1"
+                      }
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "sequential",
+                "data": {
+                  "commands": [
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "CoralIntake"
+                      }
+                    },
+                    {
+                      "type": "wait",
+                      "data": {
+                        "waitTime": 2.0
+                      }
+                    },
+                    {
+                      "type": "named",
+                      "data": {
+                        "name": "CoralStop"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "sequential",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "DriveClickToAngle240"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LimelightHorizontalAlign"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "LimelightRangeWithCoral"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "DriveClickToAngle240"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElevatorToL2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ElWristScorePos"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "DriveClickToAngle240"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "MoveUp"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "DriveClickToAngle240"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveClickToAngle240"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopRobot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralOuttake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralStop"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
