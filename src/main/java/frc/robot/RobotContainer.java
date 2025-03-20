@@ -71,7 +71,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("CoralIntake", Commands.parallel(
           m_coralIntake.autoCoralIntake(-1 * CoralIntakeConstants.CoralIntakeSpeed, .25)));
     NamedCommands.registerCommand("CoralOuttake", Commands.parallel(
-          m_coralIntake.autoCoralIntake(1 * CoralIntakeConstants.CoralIntakeSpeed, .25)));
+          m_coralIntake.autoCoralIntake(1 * CoralIntakeConstants.CoralOuttakeSpeed, .25)));
     NamedCommands.registerCommand("CoralStop", Commands.parallel(
           m_coralIntake.autoCoralIntake(1 * 0, .05)));
     NamedCommands.registerCommand("AlgaeIntake", Commands.parallel(
@@ -106,8 +106,8 @@ public class RobotContainer {
           new ManualClickToAngle(m_robotDrive, 180)));
     NamedCommands.registerCommand("DriveClickToAngle300", Commands.parallel(
           new ManualClickToAngle(m_robotDrive, 300)));
-    NamedCommands.registerCommand("DriveClickToAngle120", Commands.parallel(
-          new ManualClickToAngle(m_robotDrive, 120)));
+    NamedCommands.registerCommand("DriveClickToAngle125", Commands.parallel(
+          new ManualClickToAngle(m_robotDrive, 125)));
     NamedCommands.registerCommand("DriveClickToAngle130", Commands.parallel(
           new ManualClickToAngle(m_robotDrive, 130)));
     NamedCommands.registerCommand("DriveClickToAngle140", Commands.parallel(
@@ -119,7 +119,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("ElWristScorePos", Commands.parallel(
           m_secondaryWrist.setGoalCmd(SecondaryWristConstants.ScoreWristPos)));  
     NamedCommands.registerCommand("StopRobot", Commands.parallel(
-          m_robotDrive.stopRobotCmd()));         
+          m_robotDrive.stopRobotCmd()));
+    NamedCommands.registerCommand("ForwardWheel", Commands.parallel(
+          m_robotDrive.setForwardCmd()));        
   }
 
 
@@ -168,15 +170,18 @@ public class RobotContainer {
     // autoChooser.addOption("Auto555 display", new PathPlannerAuto("test555"));
     // autoChooser.addOption("2coral", new PathPlannerAuto("2CoralAuto1"));
     // autoChooser.addOption("MoveArmOut", new PathPlannerAuto("MoveArmOutAuto1"));
-    autoChooser.addOption("CLICK! 1 OClock Auto", new PathPlannerAuto("1OClockAuto"));
-    autoChooser.addOption("CLICK! 12 OClock Auto", new PathPlannerAuto("12OClockAuto"));
-    autoChooser.addOption("CLICK! 10 OClock Auto", new PathPlannerAuto("10OClockAuto"));
-    autoChooser.addOption("CLICK! 8 OClock Auto", new PathPlannerAuto("8OClockAuto"));
-    autoChooser.addOption("CLICK! Move Out Auto", new PathPlannerAuto("MoveOutAuto"));
-    autoChooser.addOption("CLICK! TestAutoNoLime", new PathPlannerAuto("TestAuto"));
-    autoChooser.addOption("CLICK! TestAutoWithLime", new PathPlannerAuto("TestAutoWLimelight"));
-    autoChooser.addOption("CLICK! MidRedCageTo6OClock", new PathPlannerAuto("6OClockAutoWLimelight"));
+//     autoChooser.addOption("CLICK! 1 OClock Auto", new PathPlannerAuto("1OClockAuto"));
+//     autoChooser.addOption("CLICK! 12 OClock Auto", new PathPlannerAuto("12OClockAuto"));
+//     autoChooser.addOption("CLICK! 10 OClock Auto", new PathPlannerAuto("10OClockAuto"));
+//     autoChooser.addOption("CLICK! 8 OClock Auto", new PathPlannerAuto("8OClockAuto"));
+//     autoChooser.addOption("CLICK! Move Out Auto", new PathPlannerAuto("MoveOutAuto"));
+//     autoChooser.addOption("CLICK! TestAutoNoLime", new PathPlannerAuto("TestAuto"));
+//     autoChooser.addOption("CLICK! TestAutoWithLime", new PathPlannerAuto("TestAutoWLimelight"));
+    autoChooser.addOption("CLICK! 5OClockAutoWLimelight", new PathPlannerAuto("5OClockAutoWLimelight"));
     autoChooser.addOption("CLICK! 2OClockAutoWLimelight", new PathPlannerAuto("2OClockAutoWLimelight"));
+    autoChooser.addOption("CLICK! Middle4OClockOneNote", new PathPlannerAuto("Middle4OClockOneNote"));
+    autoChooser.addOption("CLICK! Middle3OClockOneNote", new PathPlannerAuto("Middle3OClockOneNote"));
+    autoChooser.addOption("CLICK! 5OClockAutoWLimelight", new PathPlannerAuto("5OClockAutoWLimelight"));
 
 
     // autoChooser.addOption("CLICK! TestAutoWithLime", new PathPlannerAuto("TestAutoWLimelight"));

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 5.778073770491804,
-        "y": 4.1748463114754095
+        "x": 6.4610445205479445,
+        "y": 4.017487157534247
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.742110655737706,
-        "y": 7.183760245901639
+        "x": 6.425081405793847,
+        "y": 7.0264010919604765
       },
       "isLocked": false,
       "linkedName": "3OClock"
@@ -42,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 127.0730733173104
+    "rotation": 125.00000000000001
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 178.75463573323165
+    "rotation": 180.0
   },
   "useDefaultConstraints": true
 }

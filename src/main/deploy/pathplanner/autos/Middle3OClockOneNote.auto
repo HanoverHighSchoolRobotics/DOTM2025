@@ -7,13 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "MidBlueCageTo1OClock"
+            "pathName": "MiddleToSide2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "DriveClickToAngle"
+            "name": "DriveClickToAngle180"
           }
         },
         {
@@ -25,31 +25,19 @@
         {
           "type": "named",
           "data": {
-            "name": "DriveClickToAngle"
+            "name": "DriveClickToAngle180"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "LimelightRange"
+            "name": "LimelightRangeWithCoral"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "DriveClickToAngle"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "MoveUp"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DriveClickToAngle"
+            "name": "DriveClickToAngle180"
           }
         },
         {
@@ -61,19 +49,25 @@
         {
           "type": "named",
           "data": {
-            "name": "DriveClickToAngle"
+            "name": "StopRobot"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "1OClockToFarLeftFeeder"
+            "name": "CoralOuttake"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.0
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralStop"
           }
         }
       ]

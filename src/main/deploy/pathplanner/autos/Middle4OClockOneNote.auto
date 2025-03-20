@@ -5,21 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "MoveArmOut"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "MidBlueCageToSide2"
+            "pathName": "MiddleToSide2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "DriveClickToAngle"
+            "name": "DriveClickToAngle180"
           }
         },
         {
@@ -31,43 +25,19 @@
         {
           "type": "named",
           "data": {
-            "name": "DriveClickToAngle"
+            "name": "DriveClickToAngle180"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "LimelightRange"
+            "name": "LimelightRangeWithCoral"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "DriveClickToAngle"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 3.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DriveClickToAngle"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "MoveUp"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "DriveClickToAngle"
+            "name": "DriveClickToAngle180"
           }
         },
         {
@@ -79,7 +49,25 @@
         {
           "type": "named",
           "data": {
-            "name": "DriveClickToAngle"
+            "name": "StopRobot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralOuttake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralStop"
           }
         }
       ]

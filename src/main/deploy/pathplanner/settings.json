@@ -14,7 +14,7 @@
   "robotTrackwidth": 0.546,
   "driveWheelRadius": 0.075,
   "driveGearing": 4.714,
-  "maxDriveSpeed": 8.0,
+  "maxDriveSpeed": 9.0,
   "driveMotorType": "NEO",
   "driveCurrentLimit": 50.0,
   "wheelCOF": 1.0,

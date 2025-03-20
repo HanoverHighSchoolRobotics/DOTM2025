@@ -259,7 +259,7 @@ public final class Constants {
     public static final double ROTkP = .035;
     public static final double RANGEkP = .5;
 
-    public static final double HORkP = .02;
+    public static final double HORkP = .015;
     public static final double MaxAlignSpeed = .3;
 
     public static final double CoralLineUpArea = 4.15;
@@ -275,7 +275,7 @@ public final class Constants {
 
     public static final double moveBackFromCoral = .064;
     public static final double realLimelightRangeStopToCoral = .57;
-    public static final double realLimelightRangeStopToStation = 1.8;
+    public static final double realLimelightRangeStopToStation = 1.75;
   }
 
   public static final class ClimberConstants {
