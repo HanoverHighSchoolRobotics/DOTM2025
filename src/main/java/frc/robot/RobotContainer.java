@@ -72,6 +72,8 @@ public class RobotContainer {
           m_coralIntake.autoCoralIntake(-1 * CoralIntakeConstants.CoralIntakeSpeed, .25)));
     NamedCommands.registerCommand("CoralOuttake", Commands.parallel(
           m_coralIntake.autoCoralIntake(1 * CoralIntakeConstants.CoralOuttakeSpeed, .25)));
+    NamedCommands.registerCommand("CoralOuttake", Commands.parallel(
+          m_coralIntake.autoCoralIntake(1 * CoralIntakeConstants.CoralOuttakeSpeed * .5, 1)));
     NamedCommands.registerCommand("CoralStop", Commands.parallel(
           m_coralIntake.autoCoralIntake(1 * 0, .05)));
     NamedCommands.registerCommand("AlgaeIntake", Commands.parallel(
@@ -108,6 +110,10 @@ public class RobotContainer {
           new ManualClickToAngle(m_robotDrive, 300)));
     NamedCommands.registerCommand("DriveClickToAngle125", Commands.parallel(
           new ManualClickToAngle(m_robotDrive, 125)));
+    NamedCommands.registerCommand("DriveClickToAngle120", Commands.parallel(
+          new ManualClickToAngle(m_robotDrive, 120)));
+    NamedCommands.registerCommand("DriveClickToAngle235", Commands.parallel(
+          new ManualClickToAngle(m_robotDrive, 235)));
     NamedCommands.registerCommand("DriveClickToAngle130", Commands.parallel(
           new ManualClickToAngle(m_robotDrive, 130)));
     NamedCommands.registerCommand("DriveClickToAngle140", Commands.parallel(
@@ -179,10 +185,10 @@ public class RobotContainer {
 //     autoChooser.addOption("CLICK! TestAutoWithLime", new PathPlannerAuto("TestAutoWLimelight"));
     autoChooser.addOption("CLICK! 5OClockAutoWLimelight", new PathPlannerAuto("5OClockAutoWLimelight"));
     autoChooser.addOption("CLICK! 2OClockAutoWLimelight", new PathPlannerAuto("2OClockAutoWLimelight"));
-    autoChooser.addOption("CLICK! Middle4OClockOneNote", new PathPlannerAuto("Middle4OClockOneNote"));
-    autoChooser.addOption("CLICK! Middle3OClockOneNote", new PathPlannerAuto("Middle3OClockOneNote"));
-    autoChooser.addOption("CLICK! 5OClockAutoWLimelight", new PathPlannerAuto("5OClockAutoWLimelight"));
-
+    // autoChooser.addOption("CLICK! Middle4OClockOneNote", new PathPlannerAuto("Middle4OClockOneNote"));
+    // autoChooser.addOption("CLICK! Middle3OClockOneNote", new PathPlannerAuto("Middle3OClockOneNote"));
+    autoChooser.addOption("CLICK! MoveOutAuto", new PathPlannerAuto("MoveOutAuto"));
+    autoChooser.addOption("CLICK! MiddleTroughAuto", new PathPlannerAuto("MiddleTroughAuto"));
 
     // autoChooser.addOption("CLICK! TestAutoWithLime", new PathPlannerAuto("TestAutoWLimelight"));
 
@@ -302,12 +308,12 @@ public class RobotContainer {
     // set elevator to a setpoint
       // xAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralThreePos));
 
-    m_auxController.y()
+//     m_auxController.y()
     // set elevator manual negative
       // .onTrue(m_elevator.SetElevatorSpeedCmd(-1 * ElevatorConstants.ElevatorDownSpeed))
       // .onFalse(m_elevator.SetElevatorSpeedCmd(0));
-      .onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralFourPos)
-      .andThen(m_secondaryWrist.setGoalCmd(SecondaryWristConstants.L4WristPos)));
+      // .onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralFourPos)
+      // .andThen(m_secondaryWrist.setGoalCmd(SecondaryWristConstants.L4WristPos)));
     // set elevator to a setpoint
       // yAuxButton.onTrue(m_elevator.setGoalCmd(ElevatorConstants.CoralFourPos));
 

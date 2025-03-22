@@ -96,8 +96,8 @@ public final class Constants {
     public static final int kAuxControllerPort = 1;
     public static final double kAuxDeadband = 0.05;
 
-    public static final double kFASTDRIVESPEEDLIMITER = .8;
-    public static final double kFASTROTSPEEDLIMITER = .7;
+    public static final double kFASTDRIVESPEEDLIMITER = .85;
+    public static final double kFASTROTSPEEDLIMITER = .75;
 
     public static final double kSLOWDRIVESPEEDLIMITER = .3;
     public static final double kSLOWROTSPEEDLIMITER = .25;
@@ -146,12 +146,12 @@ public final class Constants {
 
     // command input constants
     public static final double ElevatorUpSpeed = .8; //.7
-    public static final double ElevatorDownSpeed = .45; //.4
+    public static final double ElevatorDownSpeed = .5; //.4
 
     // PID Positions
     // public static final double CoralOnePos = 0;
     public static final double CoralTwoPos = 0;
-    public static final double CoralThreePos = 65.5;
+    public static final double CoralThreePos = 69.5;
     public static final double CoralFourPos = 176.5; //132 75 inches top of x
     public static final double StationPos = 12.5;
   }
@@ -173,7 +173,7 @@ public final class Constants {
     public static final boolean AlgaeIntakeMotorInverted = false;
 
     // command input constants
-    public static final double AlgaeIntakeSpeed = .5;
+    public static final double AlgaeIntakeSpeed = .65;
   }
 
   public static final class ArmConstants {

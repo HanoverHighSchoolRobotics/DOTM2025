@@ -1,0 +1,91 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveArmOut"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MiddleToSide2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveClickToAngle180"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LimelightHorizontalAlign"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveClickToAngle180"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "LimelightRangeWithCoral"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveClickToAngle180"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "MoveUp"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "DriveClickToAngle180"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopRobot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "SlowCoralOuttake"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "CoralStop"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": null,
+  "choreoAuto": false
+}
